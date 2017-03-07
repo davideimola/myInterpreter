@@ -5,7 +5,7 @@
 * Imola Davide - VR386238
 * Slemer Andrea - VR386253
 *)
-module Funstore:STORE =
+module Funstore: STORE =
     struct
       type loc = int
       type 't store = loc -> 't
