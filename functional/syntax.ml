@@ -21,3 +21,4 @@ type exp =
       | And of exp * exp
       | Not of exp
       | Ifthenelse of exp * exp * exp
+      | Let of ide * exp * exp

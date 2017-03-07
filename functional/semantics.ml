@@ -25,3 +25,4 @@ let rec sem (e:exp) (r:eval env) =
                 then sem b r
                 else sem c r)
           else failwith ("nonboolean guard")
+      | Let(i,e1,e2) -> sem e2 (bind (r,i,sem e1 r))
