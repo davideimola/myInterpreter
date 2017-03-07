@@ -8,20 +8,20 @@
 
 #use "syntax.ml";;
 
-#use "env_interface.ml";;
-#use "env_semantics.ml";;
+#use "env/env_interface.ml";;
+#use "env/env_semantics.ml";;
 open Funenv;;
 
-#use "store_interface.ml";;
+#use "store/store_interface.ml";;
 #use "store_semantics.ml";;
 open Funstore;;
 
-#use "stack_interface.ml";;
-#use "stack_semantics.ml";;
+#use "stack/stack_interface.ml";;
+#use "stack/stack_semantics.ml";;
 open SemStack;;
 
-#use "stackm_interface.ml";;
-#use "stackm_semantics.ml";;
+#use "stack/stackm_interface.ml";;
+#use "stack/stackm_semantics.ml";;
 open SemMStack;;
 
 #use "domains.ml";;
