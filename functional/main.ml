@@ -12,10 +12,6 @@
 #use "env/env_semantics.ml";;
 open Funenv;;
 
-#use "store/store_interface.ml";;
-#use "store_semantics.ml";;
-open Funstore;;
-
 #use "stack/stack_interface.ml";;
 #use "stack/stack_semantics.ml";;
 open SemStack;;
