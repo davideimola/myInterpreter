@@ -6,28 +6,28 @@
 * Slemer Andrea - VR386253
 *)
 
-module SemStack: MYSTACK =
+module SemStack: STACK =
   struct
     type 'a stack = Empty of int | Push of 'a stack * 'a
     exception Emptystack
     exception Fullstack
-    let emptystack (n,x) = Empty(n)
+    let emptystack (n, x) = Empty(n)
     let rec max = function
         | Empty n -> n
-        | Push (p,a) -> max p
-    let rec leng = function
+        | Push (p, a) -> max p
+    let rec length = function
         | Empty n -> 0
-        | Push(p,a) -> 1 + leng(p)
-    let push (a,p) = if leng(p) = max(p)
-                     then raise Fullstack
-                     else Push(p,a)
+        | Push(p, a) -> 1 + length(p)
+    let push (a, p) = if length(p) = max(p)
+                      then raise Fullstack
+                      else Push(p, a)
     let pop = function
-        | Push(p,a) -> p
+        | Push(p, a) -> p
         | Empty n -> raise Emptystack
     let top = function
-        | Push(p,a) -> a
+        | Push(p, a) -> a
         | Empty n -> raise Emptystack
     let empty = function
-        | Push(p,a) -> false
+        | Push(p, a) -> false
         | Empty n -> true
   end

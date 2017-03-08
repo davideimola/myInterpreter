@@ -6,7 +6,7 @@
 * Slemer Andrea - VR386253
 *)
 
-module type MYSTACK =
+module type STACK =
   sig
     type 'a stack
     val emptystack : int * 'a -> 'a stack
@@ -14,7 +14,7 @@ module type MYSTACK =
     val pop : 'a stack -> 'a stack
     val top : 'a stack -> 'a
     val empty : 'a stack -> bool
-    val leng : 'a stack  -> int
+    val length : 'a stack  -> int
     exception Emptystack
     exception Fullstack
   end
