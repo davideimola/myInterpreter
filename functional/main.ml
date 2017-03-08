@@ -18,7 +18,7 @@ open SemStack;;
 
 #use "stack/stackm_interface.ml";;
 #use "stack/stackm_semantics.ml";;
-open SemMStack;;
+open SemStack_Modificable;;
 
 #use "domains.ml";;
 #use "operations.ml";;

@@ -11,3 +11,5 @@ type eval =
         | Int of int
         | Bool of bool
         | Unbound
+        | Funval of efun
+and efun = eval list -> eval

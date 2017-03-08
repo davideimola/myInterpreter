@@ -22,3 +22,6 @@ type exp =
       | Not of exp
       | Ifthenelse of exp * exp * exp
       | Let of ide * exp * exp
+      | Fun of ide list * exp
+      | Appl of exp * exp list
+      | Rec of ide * exp
