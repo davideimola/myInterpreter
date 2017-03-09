@@ -31,7 +31,7 @@ let rec sem (e:exp) (r:eval env) =
       | Rec(i,e) -> makefunrec(i, e, r)
       | _ -> failwith("type error"))
 
-let rec makefun ((a:exp),(x:eval env)) =
+and makefun ((a:exp),(x:eval env)) =
       (match a with
       | Fun(ii,aa) -> Funval(function d -> sem aa (bindlist (x, ii, d)))
       | _ -> failwith ("Non-functional object"))
@@ -49,5 +49,4 @@ and makefunrec (i, Fun(ii, aa), r) =
       let functional ff d =
             let r1 = bind(bindlist(r, ii, d), i, Funval(ff)) in
                   sem aa r1 in
-                  let rec fix = function x -> functional fix x in
-                          Funval(fix)
+                  let rec fix = function x -> functional fix x in Funval(fix)
