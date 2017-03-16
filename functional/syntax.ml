@@ -10,6 +10,7 @@ type ide = string
 type exp =
       | Eint of int
       | Ebool of bool
+      | Estring of string
       | Den of ide
       | Prod of exp * exp
       | Sum of exp * exp

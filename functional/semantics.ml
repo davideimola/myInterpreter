@@ -10,6 +10,7 @@ let rec sem (e:exp) (r:eval env) =
       (match e with
       | Eint(n) -> Int(n)
       | Ebool(b) -> Bool(b)
+      | Estring(s) -> String(s)
       | Den(i) -> applyenv(r,i)
       | Iszero(a) -> iszero((sem a r))
       | Eq(a,b) -> equ((sem a r),(sem b r))
@@ -29,6 +30,9 @@ let rec sem (e:exp) (r:eval env) =
       | Fun(i,a) -> makefun(Fun(i,a), r)
       | Appl(a,b) -> applyfun(sem a r, semlist b r)
       | Rec(i,e) -> makefunrec(i, e, r)
+      | SLength(s) -> sLength((sem s r))
+      | Concat(s,t) -> concat((sem s r),(sem s r))
+      | Substr(s,i1,i2) -> substr((sem s r),(sem i1 r),(sem i2 r))
       | _ -> failwith("type error"))
 
 and makefun ((a:exp),(x:eval env)) =

@@ -10,6 +10,7 @@
 type eval =
         | Int of int
         | Bool of bool
+        | String of string
         | Unbound
         | Funval of efun
 and efun = eval list -> eval

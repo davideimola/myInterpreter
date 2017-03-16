@@ -17,45 +17,57 @@ let typecheck (x, y) = match x with
 
 let minus x = if typecheck("int",x)
               then (match x with |Int(y) -> Int(-y)
-                                 | _ -> failwith ("type error"))
-              else failwith ("type error")
+                                 | _ -> failwith ("minus match error"))
+              else failwith ("minus type error")
 
 and iszero x = if typecheck("int",x)
                then (match x with |Int(y) -> Bool(y=0)
-                                  | _ -> failwith ("type error"))
-               else failwith ("type error")
+                                  | _ -> failwith ("iszero match error"))
+               else failwith ("iszero type error")
 
 and equ (x,y) = if typecheck("int",x) && typecheck("int",y)
                 then (match (x,y) with |(Int(u), Int(w)) -> Bool(u=w)
-                                       | _ -> failwith ("type error"))
-                else failwith ("type error")
+                                       | _ -> failwith ("equ match error"))
+                else failwith ("equ type error")
 
 and plus (x,y) = if typecheck("int",x) && typecheck("int",y)
                  then (match (x,y) with |(Int(u), Int(w)) -> Int(u+w)
-                                        | _ -> failwith ("type error"))
-                 else failwith ("type error")
+                                        | _ -> failwith ("plus match error"))
+                 else failwith ("plus type error")
 
 and diff (x,y) = if typecheck("int",x) && typecheck("int",y)
                  then (match (x,y) with |(Int(u), Int(w)) -> Int(u-w)
-                                        | _ -> failwith ("type error"))
-                 else failwith ("type error")
+                                        | _ -> failwith ("diff match error"))
+                 else failwith ("diff type error")
 
 and mult (x,y) = if typecheck("int",x) && typecheck("int",y)
                  then (match (x,y) with |(Int(u), Int(w)) -> Int(u*w)
-                                        | _ -> failwith ("type error"))
-                 else failwith ("type error")
+                                        | _ -> failwith ("mult match error"))
+                 else failwith ("mult type error")
 
 and et (x,y) = if typecheck("bool",x) && typecheck("bool",y)
                then (match (x,y) with |(Bool(u), Bool(w)) -> Bool(u && w)
-                                      | _ -> failwith ("type error"))
-               else failwith ("type error")
+                                      | _ -> failwith ("et match error"))
+               else failwith ("et type error")
 
 and vel (x,y) = if typecheck("bool",x) && typecheck("bool",y)
                 then (match (x,y) with |(Bool(u), Bool(w)) -> Bool(u || w)
-                                       | _ -> failwith ("type error"))
-                else failwith ("type error")
+                                       | _ -> failwith ("vel match error"))
+                else failwith ("vel type error")
 
 and non x = if typecheck("bool",x)
                 then (match x with |Bool(x) -> Bool(not(x))
-                                   | _ -> failwith ("type error"))
-                else failwith ("type error")
+                                   | _ -> failwith ("non match error"))
+                else failwith ("non type error")
+
+and sLength x = if typecheck("string",x)
+                then calcola la lunghezza
+                else failwith ("sLength type error")
+
+and concat (x,y) = if typecheck("string",x) && typecheck("string",y)
+                   then concatena due stringhe
+                   else failwith ("concat type error")
+
+and substr (x,i1,i2) = if typecheck("string",x) && typecheck("int",i1) && typecheck("int",i2)
+                      then cattura il pezzo interessato
+                      else failwith ("substr type error")
