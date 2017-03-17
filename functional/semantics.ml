@@ -31,8 +31,8 @@ let rec sem (e:exp) (r:eval env) =
       | Appl(a,b) -> applyfun(sem a r, semlist b r)
       | Rec(i,e) -> makefunrec(i, e, r)
       | SLength(s) -> sLength((sem s r))
-      | Concat(s,t) -> concat((sem s r),(sem s r))
-      | Substr(s,i1,i2) -> substr((sem s r),(sem i1 r),(sem i2 r))
+      | Concat(s,t) -> sConcat((sem s r),(sem s r))
+      | Substr(s,i1,i2) -> sSubstr((sem s r),(sem i1 r),(sem i2 r))
       | _ -> failwith("type error"))
 
 and makefun ((a:exp),(x:eval env)) =

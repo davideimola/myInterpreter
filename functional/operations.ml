@@ -61,13 +61,14 @@ and non x = if typecheck("bool",x)
                 else failwith ("non type error")
 
 and sLength x = if typecheck("string",x)
-                then calcola la lunghezza
+                then (match x with | "" -> 0
+                                   | h::t -> 1 + sLength(t))
                 else failwith ("sLength type error")
 
-and concat (x,y) = if typecheck("string",x) && typecheck("string",y)
+and sConcat (x,y) = if typecheck("string",x) && typecheck("string",y)
                    then concatena due stringhe
                    else failwith ("concat type error")
 
-and substr (x,i1,i2) = if typecheck("string",x) && typecheck("int",i1) && typecheck("int",i2)
+and sSubstr (x,i1,i2) = if typecheck("string",x) && typecheck("int",i1) && typecheck("int",i2)
                       then cattura il pezzo interessato
                       else failwith ("substr type error")
