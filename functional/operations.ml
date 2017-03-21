@@ -61,11 +61,11 @@ and non x = if typecheck("bool",x)
             else failwith ("non type error")
 
 and sConcat (x,y) = if typecheck("string",x) && typecheck("string",y)
-                    then concatena due stringhe
+                    then String.concat "" [x; y]
                     else failwith ("concat type error")
 
 and sSubstr (x,i1,i2) = if typecheck("string",x) && typecheck("int",i1) && typecheck("int",i2)
-                        then cattura il pezzo interessato
+                        then String.sub x i1 i2-i1
                         else failwith ("substr type error")
 
 let rec sLength x = if typecheck("string",x)
