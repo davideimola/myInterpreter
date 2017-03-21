@@ -30,9 +30,9 @@ let rec sem (e:exp) (r:eval env) =
       | Fun(i,a) -> makefun(Fun(i,a), r)
       | Appl(a,b) -> applyfun(sem a r, semlist b r)
       | Rec(i,e) -> makefunrec(i, e, r)
-      | SLength(s) -> sLength((sem s r))
-      | Concat(s,t) -> sConcat((sem s r),(sem s r))
-      | Substr(s,i1,i2) -> sSubstr((sem s r),(sem i1 r),(sem i2 r))
+      | Len(s) -> len((sem s r))
+      | Conc(s,t) -> conc((sem s r),(sem t r))
+      | Subs(s,i1,i2) -> subs((sem s r),(sem i1 r),(sem i2 r))
       | _ -> failwith("type error"))
 
 and makefun ((a:exp),(x:eval env)) =
