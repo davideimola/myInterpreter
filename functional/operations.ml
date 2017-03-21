@@ -13,6 +13,9 @@ let typecheck (x, y) = match x with
       | "bool" -> (match y with
           | Bool(u) -> true
           | _ -> false )
+      | "string" -> (match y with
+          | String(u) -> true
+          | _ -> false )
       | _ -> failwith ("not a valid type")
 
 let minus x = if typecheck("int",x)
