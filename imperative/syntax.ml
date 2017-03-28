@@ -23,9 +23,18 @@ type exp =
       | Not of exp
       | Ifthenelse of exp * exp * exp
       | Let of ide * exp * exp
+      | Newloc of exp
       | Fun of ide list * exp
       | Appl of exp * exp list
       | Rec of ide * exp
+      | Proc of ide list * decl * com list
       | Len of exp
       | Conc of exp * exp
       | Subs of exp * exp * exp
+and decl = (ide * exp) list * (ide * exp) list
+and com =
+      | Assign of exp * exp
+      | Cifthenelse of exp * com list * com list
+      | While of exp * com list
+      | Block of decl * com list
+      | Call of exp * exp list

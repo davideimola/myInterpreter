@@ -13,4 +13,16 @@ type eval =
         | String of string
         | Funval of efun
         | Unbound
-and efun = eval list -> eval
+and dval =
+        | Dint of int
+        | Dbool of bool
+        | Unbound
+        | Dloc of loc
+        | Dfunval of efun
+        | Dprocval of proc
+and mval =
+        | Mint of int
+        | Mbool of bool
+        | Undefined
+and efun = (dval list) * (mval store) -> eval
+and proc = (dval list) * (mval store) -> mval store
