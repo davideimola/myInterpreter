@@ -6,8 +6,6 @@
 * Slemer Andrea - VR386253
 *)
 
-[@@@ocaml.warning "-8"]
-
 let rec sem (e:exp) (r:eval env) =
       (match e with
       | Eint(n) -> Int(n)
