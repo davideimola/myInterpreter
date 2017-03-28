@@ -115,7 +115,7 @@ and semdr rl r s =
             | [] -> r
             | (i,e) :: rl1 -> let (v, s2) = semden e r1 s in
                   let (r2, s3) = semdr rl1 (bind(r, i, v)) s in r2) in
-      let rec rfix = function x -> functional rfix x in (rfix, s)
+                        let rec rfix = function x -> functional rfix x in (rfix, s)
 
 
 exception Nonstorable
