@@ -20,6 +20,10 @@ open SemStack;;
 #use "stack/stackm_semantics.ml";;
 open SemStack_Modificable;;
 
+#use "store/store_interface.ml";;
+#use "store/store_semantics.ml";;
+open Funstore;;
+
 #use "domains.ml";;
 #use "operations.ml";;
 #use "semantics.ml";;

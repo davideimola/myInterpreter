@@ -6,7 +6,8 @@
 * Slemer Andrea - VR386253
 *)
 
-let rec sem (e:exp) (r:dval env) (s: mval store) = match e with
+let rec sem (e:exp) (r:dval env) (s: mval store) =
+      match e with
       | Eint(n) -> Int(n)
       | Ebool(b) -> Bool(b)
       | Den(i) -> dvaltoeval(applyenv(r,i))
@@ -25,7 +26,7 @@ let rec sem (e:exp) (r:dval env) (s: mval store) = match e with
       | Val(e) -> let (v, s1) = semden e r s in
                                 (match v with
                                 | Dloc n -> mvaltoeval(applystore(s1, n))
-                                | _ -> failwith("not a variable")
+                                | _ -> failwith("not a variable"))
       | Let(i,e1,e2) -> let (v, s1) =
                               semden e1 r s in
                                     sem e2 (bind (r ,i, v)) s1
@@ -40,14 +41,16 @@ let rec sem (e:exp) (r:dval env) (s: mval store) = match e with
 *)
       | _ -> failwith ("nonlegal expression for sem")
 
-and semden (e:exp) (r:dval env) (s: mval store) = match e with
+and semden (e:exp) (r:dval env) (s: mval store) =
+      match e with
       | Den(i) -> (applyenv(r,i), s)
       | Fun(i, e1) -> (makefun(e, r), s)
       | Proc(i, b) -> (makeproc(e, r), s)
       | Newloc(e) -> let m = evaltomval(sem e r s) in let (l, s1) = allocate(s, m) in (Dloc l, s1)
       | _ -> (evaltodval(sem e r s), s)
 
-and semlist el r s = match el with
+and semlist el r s =
+      match el with
       | [] -> ([], s)
       | e::el1 -> let (v1, s1) = semden e r s in let (v2, s2) = semlist el1 r s1 in (v1 :: v2, s2)
 
