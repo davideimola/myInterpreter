@@ -22,6 +22,7 @@ type exp =
       | And of exp * exp
       | Not of exp
       | Ifthenelse of exp * exp * exp
+      | Val of exp
       | Let of ide * exp * exp
       | Newloc of exp
       | Fun of ide list * exp

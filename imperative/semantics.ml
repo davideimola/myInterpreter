@@ -6,6 +6,38 @@
 * Slemer Andrea - VR386253
 *)
 
+exception Nonstorable
+exception Nonexpressible
+
+let evaltomval e =
+      (match e with
+      | Int n -> Mint n
+      | Bool n -> Mbool n
+      | _ -> raise Nonstorable)
+
+let mvaltoeval m =
+      (match m with
+      | Mint n -> Int n
+      | Mbool n -> Bool n
+      | _ -> Novalue)
+
+let evaltodval e =
+      (match e with
+      | Int n -> Dint n
+      | Bool n -> Dbool n
+      | Novalue -> Unbound
+      | Funval n -> Dfunval n
+      | _ -> failwith("Not a valid type eval"))
+
+let dvaltoeval e =
+      (match e with
+      | Dint n -> Int n
+      | Dbool n -> Bool n
+      | Dloc n -> raise Nonexpressible
+      | Dfunval n -> Funval n
+      | Dprocval n -> raise Nonexpressible
+      | Unbound -> Novalue)
+
 let rec sem (e:exp) (r:dval env) (s: mval store) =
       match e with
       | Eint(n) -> Int(n)
@@ -119,35 +151,3 @@ and semdr rl r s =
             | (i,e) :: rl1 -> let (v, s2) = semden e r1 s in
                   let (r2, s3) = semdr rl1 (bind(r, i, v)) s in r2) in
                         let rec rfix = function x -> functional rfix x in (rfix, s)
-
-
-exception Nonstorable
-exception Nonexpressible
-
-let evaltomval e =
-      (match e with
-      | Int n -> Mint n
-      | Bool n -> Mbool n
-      | _ -> raise Nonstorable)
-
-let mvaltoeval m =
-      (match m with
-      | Mint n -> Int n
-      | Mbool n -> Bool n
-      | _ -> Novalue)
-
-let evaltodval e =
-      (match e with
-      | Int n -> Dint n
-      | Bool n -> Dbool n
-      | Novalue -> Unbound
-      | Funval n -> Dfunval n)
-
-let dvaltoeval e =
-      (match e with
-      | Dint n -> Int n
-      | Dbool n -> Bool n
-      | Dloc n -> raise Nonexpressible
-      | Dfunval n -> Funval n
-      | Dprocval n -> raise Nonexpressible
-      | Unbound -> Novalue)

@@ -12,7 +12,7 @@ type eval =
         | Bool of bool
         | String of string
         | Funval of efun
-        | Unbound
+        | Novalue
 and dval =
         | Dint of int
         | Dbool of bool
