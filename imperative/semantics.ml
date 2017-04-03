@@ -6,78 +6,20 @@
 * Slemer Andrea - VR386253
 *)
 
-exception Nonstorable
-exception Nonexpressible
-
-let evaltomval e =
-      (match e with
-      | Int n -> Mint n
-      | Bool n -> Mbool n
-      | _ -> raise Nonstorable)
-
-let mvaltoeval m =
-      (match m with
-      | Mint n -> Int n
-      | Mbool n -> Bool n
-      | _ -> Novalue)
-
-let evaltodval e =
-      (match e with
-      | Int n -> Dint n
-      | Bool n -> Dbool n
-      | Novalue -> Unbound
-      | Funval n -> Dfunval n
-      | _ -> failwith("Not a valid type eval"))
-
-let dvaltoeval e =
-      (match e with
-      | Dint n -> Int n
-      | Dbool n -> Bool n
-      | Dloc n -> raise Nonexpressible
-      | Dfunval n -> Funval n
-      | Dprocval n -> raise Nonexpressible
-      | Unbound -> Novalue)
-
-
-
-let rec makefun ((a:exp),(x:eval env)) =
-      (match a with
-      | Fun(ii,aa) -> Funval(function d -> sem aa (bindlist (x, ii, d)))
-      | _ -> failwith ("Non-functional object"))
-
-and makefunrec (i, Fun(ii, aa), r) =
-      let functional ff (d,s1) =
-            let r1 = bind(bindlist(r, ii, d), i, Dfunval(ff)) in
-                  sem aa r1 s1 in
-                  let rec fix = function x -> functional fix x in Funval(fix)
-
-and makeproc ((a:exp),(x:dval env)) = match a with
-      | Proc(ii,b) -> Dprocval(function (d, s) -> semb b (bindlist (x, ii, d)) s)
-      | _ -> failwith ("Non-functional object")
-
-and applyfun ((ev1:dval),(x:dval list), s) =
-      ( match ev1 with
-      | Dfunval(x) -> x (ev2, s)
-      | _ -> failwith ("attempt to apply a non-functional object"))
-
-and applyproc ((ev1:dval),(ev2:dval list), s) = match ev1 with
-      | Dprocval(x) -> x (ev2, s)
-      | _ -> failwith ("attempt to apply a non-functional object")
-
-and sem (e:exp) (r:dval env) (s: mval store) =
+let rec sem (e:exp) (r:dval env) (s: mval store) =
       match e with
       | Eint(n) -> Int(n)
       | Ebool(b) -> Bool(b)
       | Den(i) -> dvaltoeval(applyenv(r,i))
       | Iszero(a) -> iszero((sem a r s) )
       | Eq(a,b) -> equ((sem a r s) ,(sem b r s) )
-      | Prod(a,b) -> mult ( (sem a r s), (sem b r s))
-      | Sum(a,b) -> plus ( (sem a r s), (sem b r s))
-      | Diff(a,b) -> diff ( (sem a r s), (sem b r s))
-      | Minus(a) -> minus( (sem a r s))
-      | And(a,b) -> et ( (sem a r s), (sem b r s))
-      | Or(a,b) -> vel ( (sem a r s), (sem b r s))
-      | Not(a) -> non( (sem a r s))
+      | Prod(a,b) -> mult ( (sem a r s), (sem b r s) )
+      | Sum(a,b) -> plus ( (sem a r s), (sem b r s) )
+      | Diff(a,b) -> diff ( (sem a r s), (sem b r s) )
+      | Minus(a) -> minus( (sem a r s) )
+      | And(a,b) -> et ( (sem a r s), (sem b r s) )
+      | Or(a,b) -> vel ( (sem a r s), (sem b r s) )
+      | Not(a) -> non( (sem a r s) )
       | Ifthenelse(a,b,c) -> let g = sem a r s in
             if typecheck("bool",g) then (if g = Bool(true) then sem b r s else sem c r s)
             else failwith ("nonboolean guard")
@@ -93,11 +35,34 @@ and sem (e:exp) (r:dval env) (s: mval store) =
       | Appl(a,b) -> let (v1, s1) =
                           semlist b r s in
                                 applyfun(evaltodval(sem a r s), v1, s1)
-(*    | Len(s) -> len((sem s r))
-      | Conc(s,t) -> conc((sem s r),(sem t r))
-      | Subs(s,i1,i2) -> subs((sem s r),(sem i1 r),(sem i2 r))
-*)
+      | Len(a) -> len( (sem a r s) )
+      | Conc(a,b) -> conc( (sem a r s),(sem a r s) )
+      | Subs(a,i1,i2) -> subs( (sem a r s),(sem i1 r s),(sem i2 r s) )
       | _ -> failwith ("nonlegal expression for sem")
+
+and makefun ((a:exp),(x:dval env)) =
+      (match a with
+      | Fun(ii,aa) -> Dfunval(function (d, s) -> sem aa (bindlist (x, ii, d)) s)
+      | _ -> failwith ("Non-functional object"))
+
+and makefunrec (i, Fun(ii, aa), r) =
+      let functional ff (d,s1) =
+            let r1 = bind(bindlist(r, ii, d), i, Dfunval(ff)) in
+                  sem aa r1 s1 in
+                  let rec fix = function x -> functional fix x in Funval(fix)
+
+and makeproc ((a:exp),(x:dval env)) = match a with
+      | Proc(ii,b) -> Dprocval(function (d, s) -> semb b (bindlist (x, ii, d)) s)
+      | _ -> failwith ("Non-functional object")
+
+and applyfun ((ev1:dval),(ev2:dval list), s) =
+      ( match ev1 with
+      | Dfunval(x) -> x (ev2, s)
+      | _ -> failwith ("attempt to apply a non-functional object"))
+
+and applyproc ((ev1:dval),(ev2:dval list), s) = match ev1 with
+      | Dprocval(x) -> x (ev2, s)
+      | _ -> failwith ("attempt to apply a non-functional object")
 
 and semden (e:exp) (r:dval env) (s: mval store) =
       match e with
@@ -152,4 +117,4 @@ and semdr rl r s =
             | [] -> r
             | (i,e) :: rl1 -> let (v, s2) = semden e r1 s in
                   let (r2, s3) = semdr rl1 (bind(r, i, v)) s in r2) in
-                        let rec rfix = function x -> functional rfix x in (rfix, s)
+                        let rec rfix = function x -> functional x in (r, s)

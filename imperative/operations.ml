@@ -18,6 +18,9 @@ let typecheck (x, y) = match x with
           | _ -> false )
       | _ -> failwith ("not a valid type")
 
+
+(* --- BASIC FUNCTIONS - START --- *)
+
 let minus x = if typecheck("int",x)
               then (match x with |Int(y) -> Int(-y)
                                  | _ -> failwith ("minus match error"))
@@ -63,17 +66,26 @@ and non x = if typecheck("bool",x)
                                | _ -> failwith ("non match error"))
             else failwith ("non type error")
 
+(* --- BASIC FUNCTIONS - END --- *)
+
+(* --- STRING FUNCTIONS - START --- *)
+
+(* CONCATENATE STRING X TO STRING Y *)
 and conc (x,y) = if typecheck("string",x) && typecheck("string",y)
                     then (match (x,y) with | (String(x), String(y)) -> String(String.concat "" [x; y])
                                        | _ -> failwith ("conc match error"))
                     else failwith ("concat type error")
 
+(* CUT A STRING X AND PICK A PART FROM "i1" (included) to "i2" (not included) *)
 and subs (x,i1,i2) = if typecheck("string",x) && typecheck("int",i1) && typecheck("int",i2)
                         then (match (x,i1,i2) with | (String(x), Int(i1), Int(i2)) -> String(String.sub x i1 (i2-i1))
                                            | _ -> failwith ("subs match error"))
                         else failwith ("substr type error")
 
+(* COMPUTE THE LENGTH OF THE STRING X *)
 and len x = if typecheck("string",x)
                 then (match x with | String(x) -> Int(String.length x)
                                    | _ -> failwith ("leng match error"))
                 else failwith ("sLength type error")
+
+(* --- STRING FUNCTIONS - END --- *)

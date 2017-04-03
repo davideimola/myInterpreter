@@ -6,6 +6,13 @@
 * Slemer Andrea - VR386253
 *)
 
+[@@@ocaml.warning "-26"]
+[@@@ocaml.warning "-8"]
+(* Eliminazione Warning:
+ * "-8": pattern-matching is not exhaustive
+ * "-26": unused variable
+ *)
+
 #use "syntax.ml";;
 
 #use "env/env_interface.ml";;
@@ -27,3 +34,6 @@ open Funstore;;
 #use "domains.ml";;
 #use "operations.ml";;
 #use "semantics.ml";;
+
+[@@@ocaml.warning "+26"]
+[@@@ocaml.warning "+8"]
