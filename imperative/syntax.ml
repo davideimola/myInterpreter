@@ -28,7 +28,7 @@ type exp =
       | Fun of ide list * exp
       | Appl of exp * exp list
       | Rec of ide * exp
-      | Proc of ide list * decl * com list
+      | Proc of ide list * block
       | Len of exp
       | Conc of exp * exp
       | Subs of exp * exp * exp

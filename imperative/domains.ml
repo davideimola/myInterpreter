@@ -16,6 +16,7 @@ type eval =
 and dval =
         | Dint of int
         | Dbool of bool
+        | DString of string
         | Unbound
         | Dloc of loc
         | Dfunval of efun
@@ -23,6 +24,7 @@ and dval =
 and mval =
         | Mint of int
         | Mbool of bool
+        | MString of string
         | Undefined
 and efun = (dval list) * (mval store) -> eval
 and proc = (dval list) * (mval store) -> mval store
