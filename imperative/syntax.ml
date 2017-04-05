@@ -9,6 +9,7 @@
 (* IDENTIFIER *)
 type ide = string
 
+(* TYPE EXPRESSABLE *)
 type exp =
       (* CONSTANTS *)
       | Eint of int
@@ -43,11 +44,13 @@ type exp =
       | Conc of exp * exp
       | Subs of exp * exp * exp
 
-and decl = (ide * exp) list * (ide * exp) list
+(* CONSTRUCT BLOCK: need for Proc and Block *)
 and block = (ide * exp) list * (ide * exp) list  * com list
+
+(* TYPE COMMAND *)
 and com =
-      | Assign of exp * exp
-      | Cifthenelse of exp * com list * com list
-      | While of exp * com list
-      | Block of block
-      | Call of exp * exp list
+      | Assign of exp * exp                        (*  *)
+      | Cifthenelse of exp * com list * com list   (*  *)
+      | While of exp * com list                    (*  *)
+      | Block of block                             (*  *)
+      | Call of exp * exp list                     (*  *)

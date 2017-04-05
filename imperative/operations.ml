@@ -27,7 +27,7 @@ let minus x = if typecheck("int",x)
                                  | _ -> failwith ("minus match error"))
               else failwith ("minus type error")
 
-(* COMPUTE IF A NUMBER IS EQUAL TO ZERO*)
+(* COMPUTE IF A NUMBER IS EQUAL TO ZERO *)
 and iszero x = if typecheck("int",x)
                then (match x with |Int(y) -> Bool(y=0)
                                   | _ -> failwith ("iszero match error"))

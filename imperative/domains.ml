@@ -39,32 +39,39 @@ and mval =
 exception Nonstorable
 exception Nonexpressible
 
+(* CONVERT TYPE EVAL TO TYPE MVAL *)
 let evaltomval e =
       (match e with
       | Int n      -> Mint n
       | Bool n     -> Mbool n
+      | String n   -> Dstring n
       | _          -> raise Nonstorable)
 
+(* CONVERT TYPE MVAL TO TYPE EVAL *)
 let mvaltoeval m =
       (match m with
       | Mint n     -> Int n
       | Mbool n    -> Bool n
+      | Mstring n  -> String n
       | _          -> Novalue)
 
+(* CONVERT TYPE EVAL TO TYPE DVAL *)
 let evaltodval e =
       (match e with
       | Int n      -> Dint n
       | Bool n     -> Dbool n
+      | String n   -> Dstring n
       | Novalue    -> Unbound
       | Funval n   -> Dfunval n
       | _          -> failwith("Not a valid type eval"))
 
+(* CONVERT TYPE DVAL TO TYPE EVAL *)
 let dvaltoeval e =
       (match e with
       | Dint n     -> Int n
       | Dbool n    -> Bool n
+      | DString n  -> String n
       | Dloc n     -> raise Nonexpressible
       | Dfunval n  -> Funval n
       | Dprocval n -> raise Nonexpressible
-      | Unbound    -> Novalue
-      | DString n  -> String n)
+      | Unbound    -> Novalue)
