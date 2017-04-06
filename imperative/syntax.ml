@@ -54,3 +54,4 @@ and com =
       | While of exp * com list                    (*  *)
       | Block of block                             (*  *)
       | Call of exp * exp list                     (*  *)
+      | Reflect of exp                             (*  *)

@@ -10,6 +10,7 @@ let rec sem (e:exp) (r:dval env) (s: mval store) =
       match e with
       | Eint(n)    -> Int(n)
       | Ebool(b)   -> Bool(b)
+      | Estring(s) -> String(s)
       | Den(i)     -> dvaltoeval(applyenv(r,i))
       | Iszero(a)  -> iszero((sem a r s) )
       | Eq(a,b)    -> equ((sem a r s) ,(sem b r s) )
@@ -99,6 +100,8 @@ and semc (c: com) (r:dval env) (s: mval store) = match c with
                 let rec ssfix = function x -> functional ssfix x in ssfix(s)
       | Call(e1, e2) -> let (p, s1) = semden e1 r s in let (v, s2) = semlist e2 r s1 in applyproc(p, v, s2)
       | Block(b) -> semb b r s
+
+(*    | Reflect(e) -> Corpo Reflect   *)
 
 and semcl cl r s = match cl with
       | [] -> s

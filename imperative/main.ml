@@ -34,6 +34,7 @@ open Funstore;;
 #use "domains.ml";;
 #use "operations.ml";;
 #use "semantics.ml";;
+#use "reflect.ml";;
 
 [@@@ocaml.warning "+26"]
 [@@@ocaml.warning "+8"]
