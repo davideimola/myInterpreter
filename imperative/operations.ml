@@ -95,4 +95,20 @@ and len x = if typecheck("string",x)
                 then (match x with | String(x) -> Int(String.length x)
                                    | _ -> failwith ("leng match error"))
                 else failwith ("sLength type error")
+
+(* COMPARE IF THE TWO STRINGS ARE EQUALS *)
+and streq (x,y) = if typecheck("string",x) && typecheck("string",y)
+                  then (match (x,y) with | (String(x), String(y))-> Bool(String.equal x y)
+                                         | _ -> failwith ("streq match error"))
+                  else failwith ("streq type error")
+
+(* CALL THE INTERPRETER ON THE STRING *)
+and reflect x = if typecheck("string",x)
+                then
+                else failwith ("Reflect type error")
 (* --- STRING FUNCTIONS - END --- *)
+
+let rec parser (x,s1,s2) =
+  if typecheck("string",x)
+  then
+  else

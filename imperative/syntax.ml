@@ -42,6 +42,7 @@ type exp =
       (* STRING OPERATIONS *)
       | Len of exp
       | Conc of exp * exp
+      | Streq of exp * exp
       | Subs of exp * exp * exp
 
 (* CONSTRUCT BLOCK: need for Proc and Block *)

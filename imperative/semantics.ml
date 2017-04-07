@@ -38,7 +38,8 @@ let rec sem (e:exp) (r:dval env) (s: mval store) =
                                 applyfun(evaltodval(sem a r s), v1, s1)
 
       | Len(a)        -> len( (sem a r s) )
-      | Conc(a,b)     -> conc( (sem a r s),(sem a r s) )
+      | Conc(a,b)     -> conc( (sem a r s),(sem b r s) )
+      | Streq(a,b)    -> streq( (sem a r s),(sem b r s) )
       | Subs(a,i1,i2) -> subs( (sem a r s),(sem i1 r s),(sem i2 r s) )
 
       | _             -> failwith ("nonlegal expression for sem")
