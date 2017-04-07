@@ -98,21 +98,25 @@ and len x = if typecheck("string",x)
 
 (* COMPARE IF THE TWO STRINGS ARE EQUALS *)
 and streq (x,y) = if typecheck("string",x) && typecheck("string",y)
-                  then (match (x,y) with | (String(x), String(y))-> Bool(String.equal x y)
+                  then (match (x,y) with | (String(x), String(y)) -> Bool(String.equal x y)
                                          | _ -> failwith ("streq match error"))
                   else failwith ("streq type error")
 
+(* RETURN THE CHAR IN Y POSITION OF THE STRING X*)
 and charat (x,y) = if typecheck("string",x) && typecheck("int",y)
-                   then (match (x,y) with | (String(x), Int(y))-> Char(String.get x y)
-                                          | _ -> failwith ("")
+                   then (match (x,y) with | (String(x), Int(y)) -> Char(String.get x y)
+                                          | _ -> failwith ("charat match error"))
+                   else failwith ("charat type error")
 
 (* CALL THE INTERPRETER ON THE STRING *)
 and reflect x = if typecheck("string",x)
                 then
-                else failwith ("Reflect type error")
+                else failwith ("reflect type error")
 (* --- STRING FUNCTIONS - END --- *)
 
-let rec parser (x,s1,s2) =
+(* RECURSIVE OPERATIONS *)
+let rec parser x =
   if typecheck("string",x)
-  then
+  then if streq(subs(x,0,3), "Sum(") && streq(subs(x,len(x)-1,len(x)-1), ")")
+       then
   else
