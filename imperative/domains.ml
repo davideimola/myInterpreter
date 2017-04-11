@@ -62,8 +62,7 @@ let evaltodval e =
       | Bool n     -> Dbool n
       | String n   -> Dstring n
       | Novalue    -> Unbound
-      | Funval n   -> Dfunval n
-      | _          -> failwith("Not a valid type eval"))
+      | Funval n   -> Dfunval n)
 
 (* CONVERT TYPE DVAL TO TYPE EVAL *)
 let dvaltoeval e =
