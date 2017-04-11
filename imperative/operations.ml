@@ -103,6 +103,20 @@ and charat (x,y) = if typecheck("string",x) && typecheck("int",y)
 (* COMPARE IF THE TWO STRINGS ARE EQUALS *)
 let streq (x,y) = if typecheck("string",x) && typecheck("string",y)
                   then (match (x,y) with | (String(x), String(y)) -> iszero(Int(String.compare (x) y))
-                                        | _ -> failwith ("streq match error"))
+                                         | _ -> failwith ("streq match error"))
                   else failwith ("streq type error")
 (* --- STRING FUNCTIONS - END --- *)
+
+let parser (e,op_stack,st_stack) =
+      match e with String(n) ->
+
+          (* Base Case *)
+          (* String is empty - then return it *)
+          if iszero( len(n) ) then Estring n
+
+          (* Inductive Step *)
+
+          else if streq( charat( n, 0 ), ",") then                   (* "," char is ignored *)
+              parser( subs n 1 (len(n)-1) ,op_stack,st_stack )
+          else if streq( charat( n, 0 ), ")" ) then                  (* ")" char is ignored *)
+              parser(subs (n) 1 (len(n)-1) ,op_stack,st_stack )

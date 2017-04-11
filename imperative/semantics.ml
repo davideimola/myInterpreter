@@ -103,10 +103,16 @@ and semc (c: com) (r:dval env) (s: mval store) = match c with
       | Call(e1, e2) -> let (p, s1) = semden e1 r s in let (v, s2) = semlist e2 r s1 in applyproc(p, v, s2)
       | Block(b) -> semb b r s
 
+      (* Reflect use function parser to valuate string e *)
       | Reflect(e) -> let g = sem e r s in
-        if (typecheck("string",g) && len g >= Int(5) )
-        then failwith ("ok")
-        else failwith ("string not valid")
+        if (typecheck("string",g) && len g >= 5 )
+          then let st_stack = emptystack(100,Undefinedstack) in  (* String Stack*)
+               let op_stack = emptystack(100,Novalue) in         (* Operation Stack*)
+               let exp = parser(g,op_stack,st_stack) in
+               if empty(st_stack)                                (* If String stack is empty the result is OK *)
+                 then semc (Assign(Den "results", exp)) r s
+               else failwith ("parser error")
+          else failwith ("string not valid")
 
 and semcl cl r s = match cl with
       | [] -> s
