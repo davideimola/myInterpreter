@@ -19,7 +19,7 @@ and efun = (dval list) * (mval store) -> eval
 and dval =
         | Dint of int
         | Dbool of bool
-        | DString of string
+        | Dstring of string
         | Unbound
         | Dloc of loc
         | Dfunval of efun
@@ -30,7 +30,7 @@ and proc = (dval list) * (mval store) -> mval store
 and mval =
         | Mint of int
         | Mbool of bool
-        | MString of string
+        | Mstring of string
         | Undefined
 
 
@@ -44,7 +44,7 @@ let evaltomval e =
       (match e with
       | Int n      -> Mint n
       | Bool n     -> Mbool n
-      | String n   -> Dstring n
+      | String n   -> Mstring n
       | _          -> raise Nonstorable)
 
 (* CONVERT TYPE MVAL TO TYPE EVAL *)
@@ -70,7 +70,7 @@ let dvaltoeval e =
       (match e with
       | Dint n     -> Int n
       | Dbool n    -> Bool n
-      | DString n  -> String n
+      | Dstring n  -> String n
       | Dloc n     -> raise Nonexpressible
       | Dfunval n  -> Funval n
       | Dprocval n -> raise Nonexpressible

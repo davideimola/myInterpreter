@@ -75,8 +75,6 @@ and non x = if typecheck("bool",x)
                                | _ -> failwith ("non match error"))
             else failwith ("non type error")
 (* --- BASIC FUNCTIONS - END --- *)
-
-
 (* --- STRING FUNCTIONS - START --- *)
 (* CONCATENATE STRING X TO STRING Y *)
 and conc (x,y) = if typecheck("string",x) && typecheck("string",y)
@@ -86,7 +84,7 @@ and conc (x,y) = if typecheck("string",x) && typecheck("string",y)
 
 (* CUT A STRING X AND FROM INDEX "i1" (included) TO INDEX "i2" (not included) *)
 and subs (x,i1,i2) = if typecheck("string",x) && typecheck("int",i1) && typecheck("int",i2)
-                        then (match (x,i1,i2) with | (String(x), Int(i1), Int(i2)) -> String(String.sub x i1 (i2-i1))
+                        then (match (x,i1,i2) with | (String(x), Int(i1), Int(i2)) -> String(String.sub x i1 ((i2-i1)+1))
                                            | _ -> failwith ("substr match error"))
                         else failwith ("substr type error")
 
@@ -98,25 +96,13 @@ and len x = if typecheck("string",x)
 
 (* COMPARE IF THE TWO STRINGS ARE EQUALS *)
 and streq (x,y) = if typecheck("string",x) && typecheck("string",y)
-                  then (match (x,y) with | (String(x), String(y)) -> Bool(String.equal x y)
+                  then (match (x,y) with | (String(x), String(y)) -> iszero Int(String.compare x y)
                                          | _ -> failwith ("streq match error"))
                   else failwith ("streq type error")
 
 (* RETURN THE CHAR IN Y POSITION OF THE STRING X*)
 and charat (x,y) = if typecheck("string",x) && typecheck("int",y)
-                   then (match (x,y) with | (String(x), Int(y)) -> Char(String.get x y)
+                   then (match (x,y) with | (String(x), Int(y)) -> String(String.sub x y 1)
                                           | _ -> failwith ("charat match error"))
                    else failwith ("charat type error")
-
-(* CALL THE INTERPRETER ON THE STRING *)
-and reflect x = if typecheck("string",x)
-                then
-                else failwith ("reflect type error")
 (* --- STRING FUNCTIONS - END --- *)
-
-(* RECURSIVE OPERATIONS *)
-let rec parser x =
-  if typecheck("string",x)
-  then if streq(subs(x,0,3), "Sum(") && streq(subs(x,len(x)-1,len(x)-1), ")")
-       then
-  else
