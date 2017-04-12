@@ -148,11 +148,12 @@ let parser (e,op_stack,st_stack) =
 
           (* Base Case *)
           (* String is empty - then return it *)
-          if iszero( len(n) ) then Estring n
+          if isnull( len(n) ) then Estring n
 
           (* Inductive Step *)
 
-          else if eq_string( charat( n, 0 ), ",") then                   (* "," char is ignored *)
-              parser( subs n 1 (len(n)-1) ,op_stack,st_stack )
-          else if eq_string( charat( n, 0 ), ")" ) then                  (* ")" char is ignored *)
-              parser(subs (n) 1 (len(n)-1) ,op_stack,st_stack )
+          else if eq_string( String(charat( n, 0 )), String(",")) then                   (* "," char is ignored *)
+              parser( String(subs n 1 (len(n)-1)) ,op_stack,st_stack )
+          else if eq_string( String(charat( n, 0 )), String(")") ) then                  (* ")" char is ignored *)
+              parser( String(subs (n) 1 (len(n)-1)) ,op_stack,st_stack )
+          else if eq_string( String(subs (n) 0 4), String("Sum")) then
