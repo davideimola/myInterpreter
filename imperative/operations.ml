@@ -113,12 +113,12 @@ let isnull x = if typecheck("int",x)
                                   | _ -> failwith ("isnull match error"))
               else failwith ("isnull type error")
 
-let equStr (x,y) = if typecheck("string",x) && typecheck("string",y)
+let eq_string (x,y) = if typecheck("string",x) && typecheck("string",y)
                   then (match (x,y) with | (String(x), String(y)) -> isnull(Int(String.compare (x) y))
                                           | _ -> failwith ("equStr match error"))
                   else failwith ("equStr type error")
 
-let equInt (x,y) = if typecheck("int",x) && typecheck("int",y)
+let eq_int (x,y) = if typecheck("int",x) && typecheck("int",y)
                    then (match (x,y) with |(Int(u), Int(w)) -> (u=w)
                                           | _ -> failwith ("equInt match error"))
                    else failwith ("equInt type error")
@@ -152,7 +152,7 @@ let parser (e,op_stack,st_stack) =
 
           (* Inductive Step *)
 
-          else if streq( charat( n, 0 ), ",") then                   (* "," char is ignored *)
+          else if eq_string( charat( n, 0 ), ",") then                   (* "," char is ignored *)
               parser( subs n 1 (len(n)-1) ,op_stack,st_stack )
-          else if streq( charat( n, 0 ), ")" ) then                  (* ")" char is ignored *)
+          else if eq_string( charat( n, 0 ), ")" ) then                  (* ")" char is ignored *)
               parser(subs (n) 1 (len(n)-1) ,op_stack,st_stack )
