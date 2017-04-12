@@ -103,6 +103,59 @@ and charat (x,y) = if typecheck("string",x) && typecheck("int",y)
 (* COMPARE IF THE TWO STRINGS ARE EQUALS *)
 let streq (x,y) = if typecheck("string",x) && typecheck("string",y)
                   then (match (x,y) with | (String(x), String(y)) -> iszero(Int(String.compare (x) y))
-                                        | _ -> failwith ("streq match error"))
+                                         | _ -> failwith ("streq match error"))
                   else failwith ("streq type error")
 (* --- STRING FUNCTIONS - END --- *)
+
+<<<<<<< HEAD
+
+(* --- OPERATIONS FUNCTIONS - START --- *)
+let isnull x = if typecheck("int",x)
+              then (match x with |Int(y) -> (y=0)
+                                  | _ -> failwith ("isnull match error"))
+              else failwith ("isnull type error")
+
+let equStr (x,y) = if typecheck("string",x) && typecheck("string",y)
+                  then (match (x,y) with | (String(x), String(y)) -> isnull(Int(String.compare (x) y))
+                                          | _ -> failwith ("equStr match error"))
+                  else failwith ("equStr type error")
+
+let equInt (x,y) = if typecheck("int",x) && typecheck("int",y)
+                   then (match (x,y) with |(Int(u), Int(w)) -> (u=w)
+                                          | _ -> failwith ("equInt match error"))
+                   else failwith ("equInt type error")
+(* --- OPERATIONS FUNCTIONS - END --- *)
+
+(* --- FUNCTIONS FOR REFLECT - START --- *)
+let occurrence (x,y) =
+  if typecheck("string",x) && typecheck("string",y)
+  then (
+    match (x,y) with (String(x),String(y)) ->
+      let tmp = 0 in
+      let i = 0 in
+      let x_len = len(String(x)) in
+      let rec loop ( Int(i),Int(tmp) ) =
+        if ( Int(i)>=x_len )
+        then Int(tmp)
+        else if ( equStr( charat(String(x),Int(i)), String(y)) ) then
+          loop ( plus(Int(i),Int(1)), plus(Int(tmp),Int(1)) )
+        else
+          loop ( plus(Int(i),Int(1)), Int(tmp) )
+      in loop ( Int(i),Int(tmp) )
+  )
+  else failwith ("occurrence type error")
+=======
+let parser (e,op_stack,st_stack) =
+      match e with String(n) ->
+
+          (* Base Case *)
+          (* String is empty - then return it *)
+          if iszero( len(n) ) then Estring n
+
+          (* Inductive Step *)
+
+          else if streq( charat( n, 0 ), ",") then                   (* "," char is ignored *)
+              parser( subs n 1 (len(n)-1) ,op_stack,st_stack )
+          else if streq( charat( n, 0 ), ")" ) then                  (* ")" char is ignored *)
+              parser(subs (n) 1 (len(n)-1) ,op_stack,st_stack )
+>>>>>>> origin/master
