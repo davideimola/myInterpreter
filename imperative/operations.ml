@@ -107,8 +107,6 @@ let streq (x,y) = if typecheck("string",x) && typecheck("string",y)
                   else failwith ("streq type error")
 (* --- STRING FUNCTIONS - END --- *)
 
-<<<<<<< HEAD
-
 (* --- OPERATIONS FUNCTIONS - START --- *)
 let isnull x = if typecheck("int",x)
               then (match x with |Int(y) -> (y=0)
@@ -144,7 +142,7 @@ let occurrence (x,y) =
       in loop ( Int(i),Int(tmp) )
   )
   else failwith ("occurrence type error")
-=======
+
 let parser (e,op_stack,st_stack) =
       match e with String(n) ->
 
@@ -158,4 +156,3 @@ let parser (e,op_stack,st_stack) =
               parser( subs n 1 (len(n)-1) ,op_stack,st_stack )
           else if streq( charat( n, 0 ), ")" ) then                  (* ")" char is ignored *)
               parser(subs (n) 1 (len(n)-1) ,op_stack,st_stack )
->>>>>>> origin/master
