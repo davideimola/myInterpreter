@@ -105,7 +105,7 @@ and semc (c: com) (r:dval env) (s: mval store) = match c with
 
       (* Reflect use function parser to valuate string e *)
       | Reflect(e) -> let g = sem e r s in
-        if (typecheck("string",g) && len g >= 5 && equInt( occurrence(g,String("(")),occurrence(g,String(")")) ))
+        if (typecheck("string",g) && len g >= 5 && eq_int( occurrence(g,String("(")),occurrence(g,String(")")) ))
           then let st_stack = emptystack(100,Undefinedstack) in  (* String Stack*)
                let op_stack = emptystack(100,Novalue) in         (* Operation Stack*)
                let exp = parser(g,op_stack,st_stack) in

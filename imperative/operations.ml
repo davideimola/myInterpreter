@@ -135,7 +135,7 @@ let occurrence (x,y) =
       let rec loop ( Int(i),Int(tmp) ) =
         if ( Int(i)>=x_len )
         then Int(tmp)
-        else if ( equStr( charat(String(x),Int(i)), String(y)) ) then
+        else if ( eq_string( charat(String(x),Int(i)), String(y)) ) then
           loop ( plus(Int(i),Int(1)), plus(Int(tmp),Int(1)) )
         else
           loop ( plus(Int(i),Int(1)), Int(tmp) )
