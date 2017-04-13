@@ -115,16 +115,19 @@ let isnull x = if typecheck("int",x)
 
 let eq_string (x,y) = if typecheck("string",x) && typecheck("string",y)
                   then (match (x,y) with | (String(x), String(y)) -> isnull(Int(String.compare (x) y))
-                                          | _ -> failwith ("equStr match error"))
-                  else failwith ("equStr type error")
+                                          | _ -> failwith ("eq_string match error"))
+                  else failwith ("eq_string type error")
 
 let eq_int (x,y) = if typecheck("int",x) && typecheck("int",y)
                    then (match (x,y) with |(Int(u), Int(w)) -> (u=w)
-                                          | _ -> failwith ("equInt match error"))
-                   else failwith ("equInt type error")
+                                          | _ -> failwith ("eq_int match error"))
+                   else failwith ("eq_int type error")
 (* --- OPERATIONS FUNCTIONS - END --- *)
 
 (* --- FUNCTIONS FOR REFLECT - START --- *)
+
+(* FUCNTION GREATER-EQUAL *)
+
 let occurrence (x,y) =
   if typecheck("string",x) && typecheck("string",y)
   then (
@@ -142,7 +145,7 @@ let occurrence (x,y) =
       in loop ( Int(i),Int(tmp) )
   )
   else failwith ("occurrence type error")
-
+(*
 let parser (e,op_stack,st_stack) =
       match e with String(n) ->
 
@@ -157,50 +160,64 @@ let parser (e,op_stack,st_stack) =
           else if eq_string( String(charat( n, 0 )), String(")") ) then                  (* ")" char is ignored *)
               parser( String(subs (n) 1 (len(n)-1)) ,op_stack,st_stack )
           else if eq_string( String(subs (n) 0 3), String("Sum")) then
+*)
 
 (* == PROVA == *)
 
+(* search in a string s for a char c and return that char index*)
 let find (s, c) =
     if typecheck("string",s) && typecheck("string",c)
     then (
-      match (s,c) with (String(str),String(ch)) ->
-          let i = 0 in
-          let open_brack = 0 in
-          let str_len = len(String(str)) in
-          let rec loop ( Int(i), Int(open_brack) ) =
-            if ( Int(i) >= str_len || open_brack < Int(0) )
-            (* all the string is scanned then char is not found, error *)
-            (* open_brack is negative then I have a more ")" then "(" , error *)
-            then failwith ("string costruction error")
-            (* found the char and var open_brack is 0, then return char index and finish scan*)
-            if ( eq_string( charat(String(str),Int(i)), String(ch)) && eq_int( open_brack = Int(0)) ) then
-                Int(i)
-            (* searched char not found, then control for brackets and scan next char*)
-            else if ( eq_string( charat(String(str),Int(i)), String("(")) ) then
-                loop (plus(Int(i),Int(1)), plus(Int(open_brack),Int(1)))
-            else if ( eq_string( charat(String(str),Int(i)), String(")")) ) then
-                loop (plus(Int(i),Int(1)), diff(Int(open_brack),Int(1)))
-            (* no char or brackets found, then scan next char*)
-            else loop (plus(Int(i),Int(1)))
+      match (s,c) with
+        |(String(str),String(ch)) ->
+            let i = 0 in
+            let open_brack = 0 in
+            let str_len = len(String(str)) in
+            let rec loop ( Int(i), Int(open_brack) ) =
+               if (Int(i)>=str_len) || (Int(open_brack)<Int(0)) then
+               (* all the string is scanned then char is not found, error *)
+               (* open_brack is negative then I have a more ")" then "(" , error *)
+                   failwith ("string costruction error")
+               (* found the char and var open_brack is 0, then return char index and finish scan *)
+               else if (eq_string(charat(String(str),Int(i)), String(ch))) && (eq_int(Int(open_brack),Int(0))) then
+                   Int(i)
+               (* searched char not found, then control for brackets and scan next char*)
+               else if ( eq_string( charat(String(str),Int(i)), String("(")) ) then
+                   loop (plus(Int(i),Int(1)), plus(Int(open_brack),Int(1)))
+               else if ( eq_string( charat(String(str),Int(i)), String(")")) ) then
+                   loop (plus(Int(i),Int(1)), diff(Int(open_brack),Int(1)))
+               (* no char or brackets found, then scan next char*)
+               else loop (plus(Int(i),Int(1)), Int(open_brack))
+          in loop ( Int(i), Int(open_brack) )
+      | _ -> failwith ("find match error")
+    )
+    else failwith ("find type error")
 
 
-let parser (e,op_stack,st_stack) =
+
+let rec parser (e,op_stack,st_stack) =
       match e with String(n) ->
 
           (* Base Case *)
           (* String is empty - then return it *)
-          if isnull( len(n) ) then Estring n
+          if isnull( len(String(n)) ) then Estring n
 
           (* Inductive Step *)
 
-          else if eq_string( String(charat( n, 0 )), String(",")) then                   (* "," char is ignored *)
-              parser( String(subs n 1 (len(n)-1)) ,op_stack,st_stack )
-          else if eq_string( String(charat( n, 0 )), String(")") ) then                  (* ")" char is ignored *)
-              parser( String(subs (n) 1 (len(n)-1)) ,op_stack,st_stack )
-          else if eq_string( String(subs (n) 0 3), String("Sum")) then
-              (push(op_stack, String("Sum"))
-               let p1 = parser( String(subs (n) from-to-first_op) ,op_stack,st_stack ) in
-               let p2 = parser( String(subs (n) from-to-second_op) ,op_stack,st_stack ) in
+          else if eq_string( charat( String(n), Int(0) ), String(",")) then                   (* "," char is ignored *)
+              parser(subs(String(n), Int(1) , diff(len(String(n)),Int(1))), op_stack, st_stack)
+          else if eq_string( charat( String(n), Int(0) ), String(")")) then                   (* ")" char is ignored *)
+              parser(subs(String(n), Int(1) , diff(len(String(n)),Int(1))), op_stack, st_stack)
+          else if eq_string( subs(String(n),Int(0),Int(3)), String("Sum")) then
+              (
+               let src1 = find(subs(String(n),Int(4),diff(len(String(n)),Int(1))), String(",")) in
+               let src2 = find(subs(String(n),src1,diff(len(String(n)),Int(1))), String(")")) in
+               let p1 = parser( subs(String(n),Int(1),src1) ,op_stack,st_stack ) in
+               let p2 = parser( subs(String(n),src1,src2) ,op_stack,st_stack ) in
+               Sum(p1,p2)
               )
+          else if eq_string( subs(String(n),Int(0),Int(4)), String("Eint")) then
+               Eint(int_of_string (String.sub n 4 ((String.length n)-1)))
+          else failwith("command not found")
 
 (* --- FUNCTIONS FOR REFLECT - END --- *)
