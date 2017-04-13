@@ -156,4 +156,51 @@ let parser (e,op_stack,st_stack) =
               parser( String(subs n 1 (len(n)-1)) ,op_stack,st_stack )
           else if eq_string( String(charat( n, 0 )), String(")") ) then                  (* ")" char is ignored *)
               parser( String(subs (n) 1 (len(n)-1)) ,op_stack,st_stack )
-          else if eq_string( String(subs (n) 0 4), String("Sum")) then
+          else if eq_string( String(subs (n) 0 3), String("Sum")) then
+
+(* == PROVA == *)
+
+let find (s, c) =
+    if typecheck("string",s) && typecheck("string",c)
+    then (
+      match (s,c) with (String(str),String(ch)) ->
+          let i = 0 in
+          let open_brack = 0 in
+          let str_len = len(String(str)) in
+          let rec loop ( Int(i), Int(open_brack) ) =
+            if ( Int(i) >= str_len || open_brack < Int(0) )
+            (* all the string is scanned then char is not found, error *)
+            (* open_brack is negative then I have a more ")" then "(" , error *)
+            then failwith ("string costruction error")
+            (* found the char and var open_brack is 0, then return char index and finish scan*)
+            if ( eq_string( charat(String(str),Int(i)), String(ch)) && eq_int( open_brack = Int(0)) ) then
+                Int(i)
+            (* searched char not found, then control for brackets and scan next char*)
+            else if ( eq_string( charat(String(str),Int(i)), String("(")) ) then
+                loop (plus(Int(i),Int(1)), plus(Int(open_brack),Int(1)))
+            else if ( eq_string( charat(String(str),Int(i)), String(")")) ) then
+                loop (plus(Int(i),Int(1)), diff(Int(open_brack),Int(1)))
+            (* no char or brackets found, then scan next char*)
+            else loop (plus(Int(i),Int(1)))
+
+
+let parser (e,op_stack,st_stack) =
+      match e with String(n) ->
+
+          (* Base Case *)
+          (* String is empty - then return it *)
+          if isnull( len(n) ) then Estring n
+
+          (* Inductive Step *)
+
+          else if eq_string( String(charat( n, 0 )), String(",")) then                   (* "," char is ignored *)
+              parser( String(subs n 1 (len(n)-1)) ,op_stack,st_stack )
+          else if eq_string( String(charat( n, 0 )), String(")") ) then                  (* ")" char is ignored *)
+              parser( String(subs (n) 1 (len(n)-1)) ,op_stack,st_stack )
+          else if eq_string( String(subs (n) 0 3), String("Sum")) then
+              (push(op_stack, String("Sum"))
+               let p1 = parser( String(subs (n) from-to-first_op) ,op_stack,st_stack ) in
+               let p2 = parser( String(subs (n) from-to-second_op) ,op_stack,st_stack ) in
+              )
+
+(* --- FUNCTIONS FOR REFLECT - END --- *)
