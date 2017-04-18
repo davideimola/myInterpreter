@@ -128,6 +128,7 @@ let eq_int (x,y) = if typecheck("int",x) && typecheck("int",y)
 
 (* FUCNTION GREATER-EQUAL *)
 
+(* Count of the occurence of a character in a string *)
 let occurrence (x,y) =
   if typecheck("string",x) && typecheck("string",y)
   then (
@@ -146,15 +147,24 @@ let occurrence (x,y) =
   )
   else failwith ("occurrence type error")
 
+(* Converter function *)
 let str_to_int s =
   if typecheck("string",s) then
     (match (s) with String(u) -> int_of_string(u))
   else
     failwith ("type error or string not valid")
 
+let str_to_bool s =
+  if typecheck("string",s) then
+    (match (s) with String(u) -> bool_of_string(u))
+  else
+    failwith ("type error or string not valid")
+
+(* Top and Pop Stack Function *)
 let topop s =
       let top = top(s) in let pop = pop(s) in top
 
+(* Function parser for command Reflect *)
 let rec parser (e,op_stack,st_stack) =
       match e with String(n) ->
 
@@ -177,6 +187,20 @@ let rec parser (e,op_stack,st_stack) =
               else
                 let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
                 topop(op_stack)
+          else if eq_string( String(String.sub (n) 0 5), String("Ebool")) then                  (* Ebool type *)
+              if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
+                (* If the operator is before , *)
+                let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)))), op_stack) in
+                let j = push(subs(String(n),Int((String.index(n) ',')+1),diff(len(String(n)),Int(1))), st_stack) in
+                topop(op_stack)
+              else if ((String.contains(n) ')')) then
+                (* If the operator is after , *)
+                let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)))), op_stack) in
+                let j = push(subs(String(n),Int((String.index(n) ')')+1),diff(len(String(n)),Int(1))), st_stack) in
+                topop(op_stack)
+              else
+                let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
+                topop(op_stack)
 
 
           else if eq_string(subs(String(n),Int(0),Int(0)),String(",")) then                   (* "," char is ignored *)
@@ -197,6 +221,10 @@ let rec parser (e,op_stack,st_stack) =
               let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Prod(topop(op_stack),topop(op_stack))
+          else if eq_string(String(String.sub (n) 0 3), String("And")) then                   (* Operator Prod *)
+              let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              And(topop(op_stack),topop(op_stack))
 
 
           else failwith ("parser error or command not found")
