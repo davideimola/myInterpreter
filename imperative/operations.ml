@@ -145,23 +145,7 @@ let occurrence (x,y) =
       in loop ( Int(i),Int(tmp) )
   )
   else failwith ("occurrence type error")
-(*
-let convert (x,y) =
-      if typecheck("string",x) && typecheck("string",y)
-      then (
-        match (y) with
-        | "int" -> (match (x) with
-            | String(u) -> int_of_string(u)
-            | _ -> failwith("convert match error")
-          )
-        | "bool" -> (match (x) with
-            | String(u) -> bool_of_string(u)
-            | _ -> failwith("convert match error")
-          )
-        | _ -> failwith("invalid match convert type")
-      )
-      else failwith ("convert type error")
-*)
+
 let convert s =
   if typecheck("string",s) then
     (match (s) with String(u) -> int_of_string(u))
