@@ -146,7 +146,7 @@ let occurrence (x,y) =
   )
   else failwith ("occurrence type error")
 
-let convert s =
+let str_to_int s =
   if typecheck("string",s) then
     (match (s) with String(u) -> int_of_string(u))
   else
@@ -166,16 +166,16 @@ let rec parser (e,op_stack,st_stack) =
           else if eq_string( String(String.sub (n) 0 4), String("Eint")) then                  (* Eint type *)
               if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
                 (* If the operator is before , *)
-                let i = push(Eint(convert(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)))), op_stack) in
+                let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)))), op_stack) in
                 let j = push(subs(String(n),Int((String.index(n) ',')+1),diff(len(String(n)),Int(1))), st_stack) in
                 topop(op_stack)
               else if ((String.contains(n) ')')) then
                 (* If the operator is after , *)
-                let i = push(Eint(convert(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)))), op_stack) in
+                let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)))), op_stack) in
                 let j = push(subs(String(n),Int((String.index(n) ')')+1),diff(len(String(n)),Int(1))), st_stack) in
                 topop(op_stack)
               else
-                let i = push(Eint(convert(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
+                let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
                 topop(op_stack)
 
 
@@ -189,6 +189,14 @@ let rec parser (e,op_stack,st_stack) =
               let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Sum(topop(op_stack),topop(op_stack))
+          else if eq_string(String(String.sub (n) 0 4), String("Diff")) then                   (* Operator Diff *)
+              let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Diff(topop(op_stack),topop(op_stack))
+          else if eq_string(String(String.sub (n) 0 4), String("Prod")) then                   (* Operator Prod *)
+              let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Prod(topop(op_stack),topop(op_stack))
 
 
           else failwith ("parser error or command not found")
