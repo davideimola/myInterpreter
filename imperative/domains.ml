@@ -6,6 +6,10 @@
 * Slemer Andrea - VR386253
 *)
 
+(* TYPE CONVERSIONS *)
+exception Nonstorable
+exception Nonexpressible
+
 (* TYPE EVAL: EXPRESSIBLE VALUES *)
 type eval =
         | Int of int
@@ -24,6 +28,7 @@ and dval =
         | Dloc of loc
         | Dfunval of efun
         | Dprocval of proc
+
 and proc = (dval list) * (mval store) -> mval store
 
 (* TYPE MVAL: STORABLE VALUES *)
@@ -34,43 +39,38 @@ and mval =
         | Undefined
 
 
-
-(* TYPE CONVERSIONS *)
-exception Nonstorable
-exception Nonexpressible
-
 (* CONVERT TYPE EVAL TO TYPE MVAL *)
 let evaltomval e =
-      (match e with
+      match e with
       | Int n      -> Mint n
       | Bool n     -> Mbool n
       | String n   -> Mstring n
-      | _          -> raise Nonstorable)
+      | _          -> raise Nonstorable
 
 (* CONVERT TYPE MVAL TO TYPE EVAL *)
 let mvaltoeval m =
-      (match m with
+      match m with
       | Mint n     -> Int n
       | Mbool n    -> Bool n
       | Mstring n  -> String n
-      | _          -> Novalue)
+      | _          -> Novalue
 
 (* CONVERT TYPE EVAL TO TYPE DVAL *)
 let evaltodval e =
-      (match e with
+      match e with
       | Int n      -> Dint n
       | Bool n     -> Dbool n
       | String n   -> Dstring n
       | Novalue    -> Unbound
-      | Funval n   -> Dfunval n)
+      | Funval n   -> Dfunval n
 
 (* CONVERT TYPE DVAL TO TYPE EVAL *)
 let dvaltoeval e =
-      (match e with
+      match e with
       | Dint n     -> Int n
       | Dbool n    -> Bool n
       | Dstring n  -> String n
       | Dloc n     -> raise Nonexpressible
       | Dfunval n  -> Funval n
       | Dprocval n -> raise Nonexpressible
-      | Unbound    -> Novalue)
+      | Unbound    -> Novalue

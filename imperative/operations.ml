@@ -28,74 +28,74 @@ let minus x = if typecheck("int",x)
               else failwith ("minus type error")
 
 (* COMPUTE IF A NUMBER IS EQUAL TO ZERO *)
-and iszero x = if typecheck("int",x)
+let iszero x = if typecheck("int",x)
                then (match x with |Int(y) -> Bool(y=0)
                                   | _ -> failwith ("iszero match error"))
                else failwith ("iszero type error")
 
 (* COMPUTE IF AN INT X IS EQUAL TO AN INT Y *)
-and equ (x,y) = if typecheck("int",x) && typecheck("int",y)
+let equ (x,y) = if typecheck("int",x) && typecheck("int",y)
                 then (match (x,y) with |(Int(u), Int(w)) -> Bool(u=w)
                                        | _ -> failwith ("equ match error"))
                 else failwith ("equ type error")
 
 (* COMPUTE A SUM OF TWO INTS *)
-and plus (x,y) = if typecheck("int",x) && typecheck("int",y)
+let plus (x,y) = if typecheck("int",x) && typecheck("int",y)
                  then (match (x,y) with |(Int(u), Int(w)) -> Int(u+w)
                                         | _ -> failwith ("plus match error"))
                  else failwith ("plus type error")
 
 (* COMPUTE A DIFFERNCE OF TWO INTS *)
-and diff (x,y) = if typecheck("int",x) && typecheck("int",y)
+let diff (x,y) = if typecheck("int",x) && typecheck("int",y)
                  then (match (x,y) with |(Int(u), Int(w)) -> Int(u-w)
                                         | _ -> failwith ("diff match error"))
                  else failwith ("diff type error")
 
 (* COMPUTE A MULTIPLICATION OF TWO INTS *)
-and mult (x,y) = if typecheck("int",x) && typecheck("int",y)
+let mult (x,y) = if typecheck("int",x) && typecheck("int",y)
                  then (match (x,y) with |(Int(u), Int(w)) -> Int(u*w)
                                         | _ -> failwith ("mult match error"))
                  else failwith ("mult type error")
 
 (* COMPUTE THE LOGIC OPERATION "AND" *)
-and et (x,y) = if typecheck("bool",x) && typecheck("bool",y)
+let et (x,y) = if typecheck("bool",x) && typecheck("bool",y)
                then (match (x,y) with |(Bool(u), Bool(w)) -> Bool(u && w)
                                       | _ -> failwith ("et match error"))
                else failwith ("et type error")
 
 (* COMPUTE THE LOGIC OPERATION "OR" *)
-and vel (x,y) = if typecheck("bool",x) && typecheck("bool",y)
+let vel (x,y) = if typecheck("bool",x) && typecheck("bool",y)
                 then (match (x,y) with |(Bool(u), Bool(w)) -> Bool(u || w)
                                        | _ -> failwith ("vel match error"))
                 else failwith ("vel type error")
 
 (* COMPUTE THE LOGIC OPERATION "NOT" *)
-and non x = if typecheck("bool",x)
+let non x = if typecheck("bool",x)
             then (match x with |Bool(x) -> Bool(not(x))
                                | _ -> failwith ("non match error"))
             else failwith ("non type error")
 (* --- BASIC FUNCTIONS - END --- *)
 (* --- STRING FUNCTIONS - START --- *)
 (* CONCATENATE STRING X TO STRING Y *)
-and conc (x,y) = if typecheck("string",x) && typecheck("string",y)
+let conc (x,y) = if typecheck("string",x) && typecheck("string",y)
                     then (match (x,y) with | (String(x), String(y)) -> String(String.concat "" [x; y])
                                        | _ -> failwith ("concat match error"))
                     else failwith ("concat type error")
 
 (* CUT A STRING X AND FROM INDEX "i1" (included) TO INDEX "i2" (not included) *)
-and subs (x,i1,i2) = if typecheck("string",x) && typecheck("int",i1) && typecheck("int",i2)
+let subs (x,i1,i2) = if typecheck("string",x) && typecheck("int",i1) && typecheck("int",i2)
                         then (match (x,i1,i2) with | (String(x), Int(i1), Int(i2)) -> String(String.sub x i1 ((i2-i1)+1))
-                                           | _ -> failwith ("substr match error"))
-                        else failwith ("substr type error")
+                                           | _ -> failwith ("subs match error"))
+                        else failwith ("subs type error")
 
 (* COMPUTE THE LENGTH OF THE STRING X *)
-and len x = if typecheck("string",x)
+let len x = if typecheck("string",x)
                 then (match x with | String(x) -> Int(String.length x)
                                    | _ -> failwith ("len match error"))
                 else failwith ("len type error")
 
 (* RETURN THE CHAR IN Y POSITION OF THE STRING X*)
-and charat (x,y) = if typecheck("string",x) && typecheck("int",y)
+let charat (x,y) = if typecheck("string",x) && typecheck("int",y)
                    then (match (x,y) with | (String(x), Int(y)) -> String(String.sub x y 1)
                                           | _ -> failwith ("charat match error"))
                    else failwith ("charat type error")
@@ -146,54 +146,30 @@ let occurrence (x,y) =
   )
   else failwith ("occurrence type error")
 (*
-let parser (e,op_stack,st_stack) =
-      match e with String(n) ->
-
-          (* Base Case *)
-          (* String is empty - then return it *)
-          if isnull( len(n) ) then Estring n
-
-          (* Inductive Step *)
-
-          else if eq_string( String(charat( n, 0 )), String(",")) then                   (* "," char is ignored *)
-              parser( String(subs n 1 (len(n)-1)) ,op_stack,st_stack )
-          else if eq_string( String(charat( n, 0 )), String(")") ) then                  (* ")" char is ignored *)
-              parser( String(subs (n) 1 (len(n)-1)) ,op_stack,st_stack )
-          else if eq_string( String(subs (n) 0 3), String("Sum")) then
+let convert (x,y) =
+      if typecheck("string",x) && typecheck("string",y)
+      then (
+        match (y) with
+        | "int" -> (match (x) with
+            | String(u) -> int_of_string(u)
+            | _ -> failwith("convert match error")
+          )
+        | "bool" -> (match (x) with
+            | String(u) -> bool_of_string(u)
+            | _ -> failwith("convert match error")
+          )
+        | _ -> failwith("invalid match convert type")
+      )
+      else failwith ("convert type error")
 *)
+let convert s =
+  if typecheck("string",s) then
+    (match (s) with String(u) -> int_of_string(u))
+  else
+    failwith ("type error or string not valid")
 
-(* == PROVA == *)
-
-(* search in a string s for a char c and return that char index*)
-let find (s, c) =
-    if typecheck("string",s) && typecheck("string",c)
-    then (
-      match (s,c) with
-        |(String(str),String(ch)) ->
-            let i = 0 in
-            let open_brack = 0 in
-            let str_len = len(String(str)) in
-            let rec loop ( Int(i), Int(open_brack) ) =
-               if (Int(i)>=str_len) || (Int(open_brack)<Int(0)) then
-               (* all the string is scanned then char is not found, error *)
-               (* open_brack is negative then I have a more ")" then "(" , error *)
-                   failwith ("string costruction error")
-               (* found the char and var open_brack is 0, then return char index and finish scan *)
-               else if (eq_string(charat(String(str),Int(i)), String(ch))) && (eq_int(Int(open_brack),Int(0))) then
-                   Int(i)
-               (* searched char not found, then control for brackets and scan next char*)
-               else if ( eq_string( charat(String(str),Int(i)), String("(")) ) then
-                   loop (plus(Int(i),Int(1)), plus(Int(open_brack),Int(1)))
-               else if ( eq_string( charat(String(str),Int(i)), String(")")) ) then
-                   loop (plus(Int(i),Int(1)), diff(Int(open_brack),Int(1)))
-               (* no char or brackets found, then scan next char*)
-               else loop (plus(Int(i),Int(1)), Int(open_brack))
-          in loop ( Int(i), Int(open_brack) )
-      | _ -> failwith ("find match error")
-    )
-    else failwith ("find type error")
-
-
+let topop s =
+      let top = top(s) in let pop = pop(s) in top
 
 let rec parser (e,op_stack,st_stack) =
       match e with String(n) ->
@@ -203,21 +179,32 @@ let rec parser (e,op_stack,st_stack) =
           if isnull( len(String(n)) ) then Estring n
 
           (* Inductive Step *)
+          else if eq_string( String(String.sub (n) 0 4), String("Eint")) then                  (* Eint type *)
+              if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
+                (* If the operator is before , *)
+                let i = push(Eint(convert(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)))), op_stack) in
+                let j = push(subs(String(n),Int((String.index(n) ',')+1),diff(len(String(n)),Int(1))), st_stack) in
+                topop(op_stack)
+              else if ((String.contains(n) ')')) then
+                (* If the operator is after , *)
+                let i = push(Eint(convert(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)))), op_stack) in
+                let j = push(subs(String(n),Int((String.index(n) ')')+1),diff(len(String(n)),Int(1))), st_stack) in
+                topop(op_stack)
+              else
+                let i = push(Eint(convert(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
+                topop(op_stack)
 
-          else if eq_string( charat( String(n), Int(0) ), String(",")) then                   (* "," char is ignored *)
-              parser(subs(String(n), Int(1) , diff(len(String(n)),Int(1))), op_stack, st_stack)
-          else if eq_string( charat( String(n), Int(0) ), String(")")) then                   (* ")" char is ignored *)
-              parser(subs(String(n), Int(1) , diff(len(String(n)),Int(1))), op_stack, st_stack)
-          else if eq_string( subs(String(n),Int(0),Int(3)), String("Sum")) then
-              (
-               let src1 = find(subs(String(n),Int(4),diff(len(String(n)),Int(1))), String(",")) in
-               let src2 = find(subs(String(n),src1,diff(len(String(n)),Int(1))), String(")")) in
-               let p1 = parser( subs(String(n),Int(1),src1) ,op_stack,st_stack ) in
-               let p2 = parser( subs(String(n),src1,src2) ,op_stack,st_stack ) in
-               Sum(p1,p2)
-              )
-          else if eq_string( subs(String(n),Int(0),Int(4)), String("Eint")) then
-               Eint(int_of_string (String.sub n 4 ((String.length n)-1)))
-          else failwith("command not found")
 
-(* --- FUNCTIONS FOR REFLECT - END --- *)
+          else if eq_string(subs(String(n),Int(0),Int(0)),String(",")) then                   (* "," char is ignored *)
+              parser( String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack )
+          else if eq_string(subs(String(n),Int(0),Int(0)),String(")")) then                  (* ")" char is ignored *)
+              parser( String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack )
+
+
+          else if eq_string(String(String.sub (n) 0 3), String("Sum")) then                   (* Operator Sum *)
+              let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Sum(topop(op_stack),topop(op_stack))
+
+
+          else failwith ("parser error or command not found")

@@ -46,7 +46,9 @@ type exp =
       | Charat of exp * exp
       | Subs of exp * exp * exp
 
-(* CONSTRUCT BLOCK: need for Proc and Block *)
+      | Undefinedstack
+
+(* CONSTRUCT BLOCK need for Proc and Block *)
 and block = (ide * exp) list * (ide * exp) list  * com list
 
 (* TYPE COMMAND *)
