@@ -238,6 +238,10 @@ let rec parser (e,op_stack,st_stack) =
            *
            *)
 
+          (* Opeator Minus *)
+          else if eq_string(String(String.sub (n) 0 5), String("Minus")) then
+              let i1 = push(parser(String(String.sub (n) 6 (((String.length) n)-6)),op_stack,st_stack), op_stack) in
+              Minus(topop(op_stack))
           (* Operator Sum *)
           else if eq_string(String(String.sub (n) 0 3), String("Sum")) then
               let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
@@ -253,6 +257,14 @@ let rec parser (e,op_stack,st_stack) =
               let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Prod(topop(op_stack),topop(op_stack))
+          (* Opeator Iszero *)
+          else if eq_string(String(String.sub (n) 0 6), String("Iszero")) then
+              let i1 = push(parser(String(String.sub (n) 7 (((String.length) n)-7)),op_stack,st_stack), op_stack) in
+              Iszero(topop(op_stack))
+          (* Opeator Not *)
+          else if eq_string(String(String.sub (n) 0 3), String("Not")) then
+              let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
+              Not(topop(op_stack))
           (* Operator And *)
           else if eq_string(String(String.sub (n) 0 3), String("And")) then
               let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
@@ -268,6 +280,10 @@ let rec parser (e,op_stack,st_stack) =
               let i1 = push(parser(String(String.sub (n) 3 (((String.length) n)-3)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Eq(topop(op_stack),topop(op_stack))
+          (* Opeator Len *)
+          else if eq_string(String(String.sub (n) 0 3), String("Len")) then
+              let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
+              Len(topop(op_stack))
           (* Operator Conc *)
           else if eq_string(String(String.sub (n) 0 4), String("Conc")) then
               let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
@@ -283,7 +299,7 @@ let rec parser (e,op_stack,st_stack) =
               let i1 = push(parser(String(String.sub (n) 7 (((String.length) n)-7)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Charat(topop(op_stack),topop(op_stack))
-          
+
 
 
           else failwith ("parser error or command not found")
