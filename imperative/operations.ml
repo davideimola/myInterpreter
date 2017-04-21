@@ -184,7 +184,7 @@ let rec parser (e,op_stack,st_stack) =
               else if ((String.contains(n) ')')) then
                 (* If the operator is after , *)
                 let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)))), op_stack) in
-                let j = push(subs(String(n),Int((String.index(n) ')')+1),diff(len(String(n)),Int(1))), st_stack) in
+                let j = push(subs(String(n),Int(String.index(n) ')'),diff(len(String(n)),Int(1))), st_stack) in
                 topop(op_stack)
               else
                 let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
@@ -200,7 +200,7 @@ let rec parser (e,op_stack,st_stack) =
               else if ((String.contains(n) ')')) then
                 (* If the operator is after , *)
                 let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)))), op_stack) in
-                let j = push(subs(String(n),Int((String.index(n) ')')+1),diff(len(String(n)),Int(1))), st_stack) in
+                let j = push(subs(String(n),Int(String.index(n) ')'),diff(len(String(n)),Int(1))), st_stack) in
                 topop(op_stack)
               else
                 let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
@@ -216,7 +216,7 @@ let rec parser (e,op_stack,st_stack) =
               parser( String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack )
 
           (* Opearations *)
-          
+
           (*
            *
            *
