@@ -173,56 +173,7 @@ let rec parser (e,op_stack,st_stack) =
           if isnull( len(String(n)) ) then Estring n
 
       (* Inductive Step *)
-
-          (* Eint type *)
-          else if eq_string( String(String.sub (n) 0 4), String("Eint")) then
-              if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
-                (* If the operator is before , *)
-                let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)))), op_stack) in
-                let j = push(subs(String(n),Int((String.index(n) ',')+1),diff(len(String(n)),Int(1))), st_stack) in
-                topop(op_stack)
-              else if ((String.contains(n) ')')) then
-                (* If the operator is after , *)
-                let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)))), op_stack) in
-                let j = push(subs(String(n),Int(String.index(n) ')'),diff(len(String(n)),Int(1))), st_stack) in
-                topop(op_stack)
-              else
-                let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
-                topop(op_stack)
-
-          (* Ebool type *)
-          else if eq_string( String(String.sub (n) 0 5), String("Ebool")) then
-              if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
-                (* If the operator is before , *)
-                let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)))), op_stack) in
-                let j = push(subs(String(n),Int((String.index(n) ',')+1),diff(len(String(n)),Int(1))), st_stack) in
-                topop(op_stack)
-              else if ((String.contains(n) ')')) then
-                (* If the operator is after , *)
-                let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)))), op_stack) in
-                let j = push(subs(String(n),Int(String.index(n) ')'),diff(len(String(n)),Int(1))), st_stack) in
-                topop(op_stack)
-              else
-                let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
-                topop(op_stack)
-
-          (* Estring type *)
-          else if eq_string( String(String.sub (n) 0 7), String("Estring")) then
-              if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
-                (* If the operator is before , *)
-                let i = push(Estring(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)), op_stack) in
-                let j = push(subs(String(n),Int((String.index(n) ',')+1),diff(len(String(n)),Int(1))), st_stack) in
-                topop(op_stack)
-              else if ((String.contains(n) ')')) then
-                (* If the operator is after , *)
-                let i = push(Estring(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)), op_stack) in
-                let j = push(subs(String(n),Int(String.index(n) ')'),diff(len(String(n)),Int(1))), st_stack) in
-                topop(op_stack)
-              else
-                let i = push(Estring(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)), op_stack) in
-                topop(op_stack)
-
-          (* Ignored character *)
+          (* Ignored characters *)
 
           (* "," character is ignored *)
           else if eq_string(subs(String(n),Int(0),Int(0)),String(",")) then
@@ -231,80 +182,139 @@ let rec parser (e,op_stack,st_stack) =
           else if eq_string(subs(String(n),Int(0),Int(0)),String(")")) then
               parser( String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack )
 
-          (* Opearations *)
 
-          (*
-           *
-           *
+          (* Terminal types [Eint, Ebool, Estring]
+           * If a terminal type is recognized:
+           * First block: check if is an operation first operator, before a char "," and a char ")" -> otherwise run second block
+           * Second block: check if is an operation second operator, before only char ")" -> otherwise run third block
+           * Third block: is alone
            *)
 
-          (* Opeator Minus *)
+          (* Eint type *)
+          else if eq_string( String(String.sub (n) 0 4), String("Eint")) then
+              if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
+                (* Eint: first block *)
+                let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)))), op_stack) in
+                let j = push(subs(String(n),Int((String.index(n) ',')+1),diff(len(String(n)),Int(1))), st_stack) in
+                topop(op_stack)
+              else if ((String.contains(n) ')')) then
+                (* Eint: second block *)
+                let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)))), op_stack) in
+                let j = push(subs(String(n),Int(String.index(n) ')'),diff(len(String(n)),Int(1))), st_stack) in
+                topop(op_stack)
+              else
+                (* Eint: third block *)
+                let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
+                topop(op_stack)
+          (* Ebool type *)
+          else if eq_string( String(String.sub (n) 0 5), String("Ebool")) then
+              if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
+                (* Ebool: first block *)
+                let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)))), op_stack) in
+                let j = push(subs(String(n),Int((String.index(n) ',')+1),diff(len(String(n)),Int(1))), st_stack) in
+                topop(op_stack)
+              else if ((String.contains(n) ')')) then
+                (* Ebool: second block *)
+                let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)))), op_stack) in
+                let j = push(subs(String(n),Int(String.index(n) ')'),diff(len(String(n)),Int(1))), st_stack) in
+                topop(op_stack)
+              else
+                (* Ebool: third block *)
+                let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
+                topop(op_stack)
+          (* Estring type *)
+          else if eq_string( String(String.sub (n) 0 7), String("Estring")) then
+              if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
+                (* Estring: first block *)
+                let i = push(Estring(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)), op_stack) in
+                let j = push(subs(String(n),Int((String.index(n) ',')+1),diff(len(String(n)),Int(1))), st_stack) in
+                topop(op_stack)
+              else if ((String.contains(n) ')')) then
+                (* Estring: second block *)
+                let i = push(Estring(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)), op_stack) in
+                let j = push(subs(String(n),Int(String.index(n) ')'),diff(len(String(n)),Int(1))), st_stack) in
+                topop(op_stack)
+              else
+                (* Estring: third block *)
+                let i = push(Estring(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)), op_stack) in
+                topop(op_stack)
+
+          (* Opearations *)
+
+          (* If an operation type is recognized:
+           * i1 -> push in op_stack the first terminal type. That is obtained from a recursive parser call.
+           * i2 -> push in op_stack the second terminal type. (Needed only if the operation requires 2 or more parameters)
+           * i3 -> push in op_stack the third terminal type. (Needed only if the operation requires 3 or more parameters)
+           * Call the correct operation and take the parameters from the top of op_stack
+           *)
+
+          (* Operation Minus *)
           else if eq_string(String(String.sub (n) 0 5), String("Minus")) then
               let i1 = push(parser(String(String.sub (n) 6 (((String.length) n)-6)),op_stack,st_stack), op_stack) in
               Minus(topop(op_stack))
-          (* Operator Sum *)
+          (* Operation Sum *)
           else if eq_string(String(String.sub (n) 0 3), String("Sum")) then
               let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Sum(topop(op_stack),topop(op_stack))
-          (* Operator Diff *)
+          (* Operation Diff *)
           else if eq_string(String(String.sub (n) 0 4), String("Diff")) then
               let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Diff(topop(op_stack),topop(op_stack))
-          (* Operator Prod *)
+          (* Operation Prod *)
           else if eq_string(String(String.sub (n) 0 4), String("Prod")) then
               let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Prod(topop(op_stack),topop(op_stack))
-          (* Opeator Iszero *)
+          (* Operation Iszero *)
           else if eq_string(String(String.sub (n) 0 6), String("Iszero")) then
               let i1 = push(parser(String(String.sub (n) 7 (((String.length) n)-7)),op_stack,st_stack), op_stack) in
               Iszero(topop(op_stack))
-          (* Opeator Not *)
+          (* Operation Not *)
           else if eq_string(String(String.sub (n) 0 3), String("Not")) then
               let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
               Not(topop(op_stack))
-          (* Operator And *)
+          (* Operation And *)
           else if eq_string(String(String.sub (n) 0 3), String("And")) then
               let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               And(topop(op_stack),topop(op_stack))
-          (* Operator Or *)
+          (* Operation Or *)
           else if eq_string(String(String.sub (n) 0 2), String("Or")) then
               let i1 = push(parser(String(String.sub (n) 3 (((String.length) n)-3)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Or(topop(op_stack),topop(op_stack))
-          (* Operator Eq *)
+          (* Operation Eq *)
           else if eq_string(String(String.sub (n) 0 2), String("Eq")) then
               let i1 = push(parser(String(String.sub (n) 3 (((String.length) n)-3)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Eq(topop(op_stack),topop(op_stack))
-          (* Opeator Len *)
+          (* Operation Len *)
           else if eq_string(String(String.sub (n) 0 3), String("Len")) then
               let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
               Len(topop(op_stack))
-          (* Operator Conc *)
+          (* Operation Conc *)
           else if eq_string(String(String.sub (n) 0 4), String("Conc")) then
               let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Conc(topop(op_stack),topop(op_stack))
-          (* Operator Streq *)
+          (* Operation Streq *)
           else if eq_string(String(String.sub (n) 0 5), String("Streq")) then
               let i1 = push(parser(String(String.sub (n) 6 (((String.length) n)-6)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Streq(topop(op_stack),topop(op_stack))
-          (* Operator Charat *)
+          (* Operation Charat *)
           else if eq_string(String(String.sub (n) 0 6), String("Charat")) then
               let i1 = push(parser(String(String.sub (n) 7 (((String.length) n)-7)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Charat(topop(op_stack),topop(op_stack))
-          (* Operator Subs *)
+          (* Operation Subs *)
           else if eq_string(String(String.sub (n) 0 4), String("Subs")) then
               let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               let i3 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Subs(topop(op_stack),topop(op_stack),topop(op_stack))
 
-
+          (* No command recognized *)
           else failwith ("parser error or command not found")
