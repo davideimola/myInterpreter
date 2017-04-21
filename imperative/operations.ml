@@ -299,7 +299,12 @@ let rec parser (e,op_stack,st_stack) =
               let i1 = push(parser(String(String.sub (n) 7 (((String.length) n)-7)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Charat(topop(op_stack),topop(op_stack))
-
+          (* Operator Subs *)
+          else if eq_string(String(String.sub (n) 0 4), String("Subs")) then
+              let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              let i3 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Subs(topop(op_stack),topop(op_stack),topop(op_stack))
 
 
           else failwith ("parser error or command not found")
