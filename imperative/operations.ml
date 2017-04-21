@@ -168,12 +168,14 @@ let topop s =
 let rec parser (e,op_stack,st_stack) =
       match e with String(n) ->
 
-          (* Base Case *)
+      (* Base Case *)
           (* String is empty - then return it *)
           if isnull( len(String(n)) ) then Estring n
 
-          (* Inductive Step *)
-          else if eq_string( String(String.sub (n) 0 4), String("Eint")) then                  (* Eint type *)
+      (* Inductive Step *)
+
+          (* Eint type *)
+          else if eq_string( String(String.sub (n) 0 4), String("Eint")) then
               if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
                 (* If the operator is before , *)
                 let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)))), op_stack) in
@@ -187,7 +189,9 @@ let rec parser (e,op_stack,st_stack) =
               else
                 let i = push(Eint(str_to_int(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
                 topop(op_stack)
-          else if eq_string( String(String.sub (n) 0 5), String("Ebool")) then                  (* Ebool type *)
+
+          (* Ebool type *)
+          else if eq_string( String(String.sub (n) 0 5), String("Ebool")) then
               if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
                 (* If the operator is before , *)
                 let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)))), op_stack) in
@@ -202,26 +206,39 @@ let rec parser (e,op_stack,st_stack) =
                 let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
                 topop(op_stack)
 
+          (* Ignored character *)
 
-          else if eq_string(subs(String(n),Int(0),Int(0)),String(",")) then                   (* "," char is ignored *)
+          (* "," character is ignored *)
+          else if eq_string(subs(String(n),Int(0),Int(0)),String(",")) then
               parser( String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack )
-          else if eq_string(subs(String(n),Int(0),Int(0)),String(")")) then                  (* ")" char is ignored *)
+          (* ")" character is ignored *)
+          else if eq_string(subs(String(n),Int(0),Int(0)),String(")")) then
               parser( String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack )
 
+          (* Opearations *)
+          
+          (*
+           *
+           *
+           *)
 
-          else if eq_string(String(String.sub (n) 0 3), String("Sum")) then                   (* Operator Sum *)
+          (* Operator Sum *)
+          else if eq_string(String(String.sub (n) 0 3), String("Sum")) then
               let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Sum(topop(op_stack),topop(op_stack))
-          else if eq_string(String(String.sub (n) 0 4), String("Diff")) then                   (* Operator Diff *)
+          (* Operator Diff *)
+          else if eq_string(String(String.sub (n) 0 4), String("Diff")) then
               let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Diff(topop(op_stack),topop(op_stack))
-          else if eq_string(String(String.sub (n) 0 4), String("Prod")) then                   (* Operator Prod *)
+          (* Operator Prod *)
+          else if eq_string(String(String.sub (n) 0 4), String("Prod")) then
               let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Prod(topop(op_stack),topop(op_stack))
-          else if eq_string(String(String.sub (n) 0 3), String("And")) then                   (* Operator Prod *)
+          (* Operator And *)
+          else if eq_string(String(String.sub (n) 0 3), String("And")) then
               let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               And(topop(op_stack),topop(op_stack))
