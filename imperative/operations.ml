@@ -206,6 +206,22 @@ let rec parser (e,op_stack,st_stack) =
                 let i = push(Ebool(str_to_bool(String(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)))), op_stack) in
                 topop(op_stack)
 
+          (* Estring type *)
+          else if eq_string( String(String.sub (n) 0 7), String("Estring")) then
+              if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
+                (* If the operator is before , *)
+                let i = push(Estring(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)), op_stack) in
+                let j = push(subs(String(n),Int((String.index(n) ',')+1),diff(len(String(n)),Int(1))), st_stack) in
+                topop(op_stack)
+              else if ((String.contains(n) ')')) then
+                (* If the operator is after , *)
+                let i = push(Estring(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)), op_stack) in
+                let j = push(subs(String(n),Int(String.index(n) ')'),diff(len(String(n)),Int(1))), st_stack) in
+                topop(op_stack)
+              else
+                let i = push(Estring(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)), op_stack) in
+                topop(op_stack)
+
           (* Ignored character *)
 
           (* "," character is ignored *)
@@ -242,6 +258,32 @@ let rec parser (e,op_stack,st_stack) =
               let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               And(topop(op_stack),topop(op_stack))
+          (* Operator Or *)
+          else if eq_string(String(String.sub (n) 0 2), String("Or")) then
+              let i1 = push(parser(String(String.sub (n) 3 (((String.length) n)-3)),op_stack,st_stack), op_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Or(topop(op_stack),topop(op_stack))
+          (* Operator Eq *)
+          else if eq_string(String(String.sub (n) 0 2), String("Eq")) then
+              let i1 = push(parser(String(String.sub (n) 3 (((String.length) n)-3)),op_stack,st_stack), op_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Eq(topop(op_stack),topop(op_stack))
+          (* Operator Conc *)
+          else if eq_string(String(String.sub (n) 0 4), String("Conc")) then
+              let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Conc(topop(op_stack),topop(op_stack))
+          (* Operator Streq *)
+          else if eq_string(String(String.sub (n) 0 5), String("Streq")) then
+              let i1 = push(parser(String(String.sub (n) 6 (((String.length) n)-6)),op_stack,st_stack), op_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Streq(topop(op_stack),topop(op_stack))
+          (* Operator Charat *)
+          else if eq_string(String(String.sub (n) 0 6), String("Charat")) then
+              let i1 = push(parser(String(String.sub (n) 7 (((String.length) n)-7)),op_stack,st_stack), op_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Charat(topop(op_stack),topop(op_stack))
+          
 
 
           else failwith ("parser error or command not found")
