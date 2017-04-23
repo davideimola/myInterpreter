@@ -160,11 +160,23 @@ let str_to_bool s =
   else
     failwith ("type error or string not valid")
 
-(* Top and Pop Stack Function *)
+(* Top and Pop op_stack Function *)
 let topop s =
       let top = top(s) in let pop = pop(s) in top
 
-(* Function parser for command Reflect *)
+let isCommand s =
+      match s with String(g) ->
+          if eq_string(subs(String(g),Int(0),Int(5)),String("Assign")) ||
+             eq_string(subs(String(g),Int(0),Int(10)),String("Cifthenelse")) ||
+             eq_string(subs(String(g),Int(0),Int(4)),String("While")) ||
+             eq_string(subs(String(g),Int(0),Int(3)),String("Call")) ||
+             eq_string(subs(String(g),Int(0),Int(6)),String("Reflect")) then
+            true
+          else
+            false
+
+
+(* Function parser for command Reflect for functions *)
 let rec parser (e,op_stack,st_stack) =
       match e with String(n) ->
 
@@ -318,3 +330,35 @@ let rec parser (e,op_stack,st_stack) =
 
           (* No command recognized *)
           else failwith ("parser error or command not found")
+(*
+DA AGGIUNGERE PER ALCUNE FUNZIONI
+and rec parserList (e,op_stack,st_stack) =
+      match e with String(n) ->
+*)
+
+(* Function parser for command Reflect for commands *)
+let rec parserCom (e,op_stack,stackcom,st_stack) =
+      match e with String(n) ->
+          (* "," character is ignored *)
+          if equals(substr(String(n),Int(0),Int(0)),String(",")) then
+            parserCom(String(String.sub (n) 1 (((String.length) n)-1)),op_stack,co_stack,st_stack)
+          (* ")" character is ignored *)
+          else if equals(substr(String(n),Int(0),Int(0)),String(")")) then
+            parserCom(String(String.sub (n) 1 (((String.length) n)-1)),op_stack,co_stack,st_stack)
+
+          (* Command Assign *)
+          else if (((String.length) n)>=6) && equals(String(String.sub (n) 0 6),String("Assign")) then
+              let i1 = push(parser(String(String.sub (n) 7 (((String.length) n)-7)),op_stack,st_stack), op_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Assign(topop(op_stack),topop(op_stack))
+          (* Command Cifthenelse *)
+          else if (((String.length) n)>=6) && equals(String(String.sub (n) 0 11),String("Cifthenelse")) then
+              let i1 = push(parser(String(String.sub (n) 12 (((String.length) n)-12)),op_stack,st_stack), op_stack) in
+              let i2 = parserComList(topop(st_stack),op_stack,co_stack,st_stack) in
+              let i3 = parserComList(topop(st_stack),op_stack,co_stack,st_stack) in
+              Cifthenelse(topop(op_stack),i2,i3)
+(*
+DA AGGIUNGERE
+and rec parserComList (e,op_stack,stackcom,st_stack) =
+      match e with String(n) ->
+*)

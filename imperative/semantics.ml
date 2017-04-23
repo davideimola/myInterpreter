@@ -110,9 +110,15 @@ and semc (c: com) (r:dval env) (s: mval store) = match c with
                let op_stack = emptystack(100,Undefinedstack) in         (* Operation Stack*)
                let exp = parser(g,op_stack,st_stack) in
                if empty(st_stack) || eq_string(subs(top(st_stack),Int(0),Int(0)),String(")"))                                (* If String stack is empty the result is OK *)
-               then semc (Assign(Den "result",exp)) r s
+                  then semc (Assign(Den "result",exp)) r s
                else failwith ("parser error")
-          else failwith ("string not valid")
+        else if typecheck("string",g) && eq_int(occurrence(g,String("(")),occurrence(g,String(")"))) && len(g)>=Int(5) && isCommand(g)
+          then let st_stack = emptystack(100,Novalue) in       (* String Stack*)
+               let op_stack = emptystack(100,Undefinedstack) in         (* Operation Stack*)
+               let co_stack = = emptystack(100,Undefinedstackcom) in         (* Command Stack*)
+               let exp = parserCom(g,op_stack,co_stack,st_stack) in
+               semc com r s
+        else failwith ("string not valid")
 
 and semcl cl r s = match cl with
       | [] -> s
