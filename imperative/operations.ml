@@ -332,7 +332,7 @@ let rec parser (e,op_stack,st_stack) =
           else failwith ("parser error or command not found")
 (*
 DA AGGIUNGERE PER ALCUNE FUNZIONI
-and rec parserList (e,op_stack,st_stack) =
+and parserList (e,op_stack,st_stack) =
       match e with String(n) ->
 *)
 
@@ -359,6 +359,6 @@ let rec parserCom (e,op_stack,stackcom,st_stack) =
               Cifthenelse(topop(op_stack),i2,i3)
 (*
 DA AGGIUNGERE
-and rec parserComList (e,op_stack,stackcom,st_stack) =
+and parserComList (e,op_stack,stackcom,st_stack) =
       match e with String(n) ->
 *)
