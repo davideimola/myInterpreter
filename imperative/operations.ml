@@ -100,7 +100,7 @@ let charat (x,y) = if typecheck("string",x) && typecheck("int",y)
                                           | _ -> failwith ("charat match error"))
                    else failwith ("charat type error")
 
-(* COMPARE IF THE TWO STRINGS ARE EQUALS *)
+(* COMPARE IF THE TWO STRINGS ARE eq_string *)
 let streq (x,y) = if typecheck("string",x) && typecheck("string",y)
                   then (match (x,y) with | (String(x), String(y)) -> iszero(Int(String.compare (x) y))
                                          | _ -> failwith ("streq match error"))
@@ -195,13 +195,30 @@ let rec parser (e,op_stack,st_stack) =
               parser( String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack )
 
 
-          (* Terminal types [Eint, Ebool, Estring]
+          (* Terminal types [Den, Eint, Ebool, Estring]
            * If a terminal type is recognized:
            * First block: check if is an operation first operator, before a char "," and a char ")" -> otherwise run second block
            * Second block: check if is an operation second operator, before only char ")" -> otherwise run third block
            * Third block: is alone
            *)
 
+
+           (* Den type *)
+           else if eq_string( String(String.sub (n) 0 3), String("Den")) then
+               if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
+                 (* Den: first block *)
+                 let i = push(Den(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ',')-(String.index(n) ' ')-1)), op_stack) in
+                 let j = push(subs(String(n),Int((String.index(n) ',')+1),diff(len(String(n)),Int(1))), st_stack) in
+                 topop(op_stack)
+               else if ((String.contains(n) ')')) then
+                 (* Den: second block *)
+                 let i = push(Den(String.sub (n) ((String.index(n) ' ')+1) ((String.index(n) ')')-(String.index(n) ' ')-1)), op_stack) in
+                 let j = push(subs(String(n),Int(String.index(n) ')'),diff(len(String(n)),Int(1))), st_stack) in
+                 topop(op_stack)
+               else
+                 (* Den: third block *)
+                 let i = push(Den(String.sub (n) ((String.index(n) ' ')+1) ((String.length (n))-(String.index(n) ' ')-1)), op_stack) in
+                 topop(op_stack)
           (* Eint type *)
           else if eq_string( String(String.sub (n) 0 4), String("Eint")) then
               if ((String.contains(n) ',') && ((String.index(n) ',')<(String.index(n) ')'))) then
@@ -302,6 +319,44 @@ let rec parser (e,op_stack,st_stack) =
               let i1 = push(parser(String(String.sub (n) 3 (((String.length) n)-3)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Eq(topop(op_stack),topop(op_stack))
+          (* Operation Val *)
+          else if eq_string(String(String.sub (n) 0 3), String("Val")) then
+              let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
+              Val(topop(op_stack))
+          (* Operation Newloc *)
+          else if eq_string(String(String.sub (n) 0 6), String("Newloc")) then
+              let i1 = push(parser(String(String.sub (n) 7 (((String.length) n)-7)),op_stack,st_stack), op_stack) in
+              Newloc(topop(op_stack))
+          (* Operation Appl *)
+          else if eq_string(String(String.sub (n) 0 4), String("Appl")) then
+              let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
+              let i2 = parserList(topop(st_stack),op_stack,st_stack) in
+              Appl(topop(op_stack),i2)
+          (* Operation Fun *)
+          else if eq_string(String(String.sub (n) 0 3), String("Fun")) then
+              let i1 = (String.sub (n) ((String.index(n) '[')+1) ((String.index(n) ']')-1)) in
+              let l  = push(String(String.sub (n) ((String.index(n) ']')+1) (((String.length) n)-((String.index(n) ']')+1))), st_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Fun([i1],topop(op_stack))
+          (* Operation Rec *)
+          else if eq_string(String(String.sub (n) 0 3), String("Rec")) then
+              let i1 = (String.sub (n) 4 (((String.index(n) ',')-4)-1)) in
+              let l  = push(String(String.sub (n) (String.index(n) ',') (((String.length) n)-(String.index(n) ','))), st_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Rec(i1,topop(op_stack))
+          (* Operation Ifthenelse *)
+          else if eq_string(String(String.sub (n) 0 10),String("Ifthenelse")) then
+              let i1 = push(parser(String(String.sub (n) 11 (((String.length) n)-11)),op_stack,st_stack), op_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              let i3 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Ifthenelse(topop(op_stack),topop(op_stack),topop(op_stack))
+          (* Operation Let *)
+          else if eq_string(String(String.sub (n) 0 3),String("Let")) then
+              let i1 = (String.sub (n) 4 (((String.index(n) ',')-4)-1)) in
+              let l  = push(String(String.sub (n) (String.index(n) ',') (((String.length) n)-(String.index(n) ','))), st_stack) in
+              let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              let i3 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
+              Let(i1,topop(op_stack),topop(op_stack))
           (* Operation Len *)
           else if eq_string(String(String.sub (n) 0 3), String("Len")) then
               let i1 = push(parser(String(String.sub (n) 4 (((String.length) n)-4)),op_stack,st_stack), op_stack) in
@@ -328,37 +383,87 @@ let rec parser (e,op_stack,st_stack) =
               let i3 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Subs(topop(op_stack),topop(op_stack),topop(op_stack))
 
-          (* No command recognized *)
-          else failwith ("parser error or command not found")
-(*
-DA AGGIUNGERE PER ALCUNE FUNZIONI
+          (* No Expression recognized *)
+          else failwith ("parser error or expression not found")
+
 and parserList (e,op_stack,st_stack) =
       match e with String(n) ->
-*)
+      let listFunction = [] in
+      if (String.contains(n) '[') && ((String.index(n) '[')<(String.index(n) ';')) then
+          let i1 = (String.sub (n) ((String.index(n) '[')+1) (((String.length) n)-(String.index(n) '[')-1)) in
+          let i2 = push(String(i1),st_stack) in
+          let l1 = parser(String(i1),op_stack,st_stack) in
+          let l2 = parserList(topop(st_stack),op_stack,st_stack) in
+          let l = l1 :: l2 in l
+      else if (String.contains(n) ';') && ((String.index(n) ';')<(String.index(n) ']')) then
+          let i1 = (String.sub (n) ((String.index(n) ';')+1) (((String.length) n)-(String.index(n) ';')-1)) in
+          let i2 = push(String(i1),st_stack) in
+          let l1 = parser(String(i1),op_stack,st_stack) in
+          let l2 = parserList(topop(st_stack),op_stack,st_stack) in
+          let l = l1 :: l2 in l
+      else
+          let i1 = (String.sub (n) ((String.index(n) ']')+1) (((String.length) n)-(String.index(n) ']')-1)) in
+          let i2 = push(String(i1),st_stack) in
+          listFunction
+
+
 
 (* Function parser for command Reflect for commands *)
-let rec parserCom (e,op_stack,stackcom,st_stack) =
+let rec parserCom (e,op_stack,st_stack) =
       match e with String(n) ->
           (* "," character is ignored *)
-          if equals(substr(String(n),Int(0),Int(0)),String(",")) then
-            parserCom(String(String.sub (n) 1 (((String.length) n)-1)),op_stack,co_stack,st_stack)
+          if eq_string(subs(String(n),Int(0),Int(0)),String(",")) then
+            parserCom(String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack)
           (* ")" character is ignored *)
-          else if equals(substr(String(n),Int(0),Int(0)),String(")")) then
-            parserCom(String(String.sub (n) 1 (((String.length) n)-1)),op_stack,co_stack,st_stack)
+          else if eq_string(subs(String(n),Int(0),Int(0)),String(")")) then
+            parserCom(String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack)
 
           (* Command Assign *)
-          else if (((String.length) n)>=6) && equals(String(String.sub (n) 0 6),String("Assign")) then
+          else if (((String.length) n)>=6) && eq_string(String(String.sub (n) 0 6),String("Assign")) then
               let i1 = push(parser(String(String.sub (n) 7 (((String.length) n)-7)),op_stack,st_stack), op_stack) in
               let i2 = push(parser(topop(st_stack),op_stack,st_stack), op_stack) in
               Assign(topop(op_stack),topop(op_stack))
+          (* Command Block *)
           (* Command Cifthenelse *)
-          else if (((String.length) n)>=6) && equals(String(String.sub (n) 0 11),String("Cifthenelse")) then
+          else if (((String.length) n)>=11) && eq_string(String(String.sub (n) 0 11),String("Cifthenelse")) then
               let i1 = push(parser(String(String.sub (n) 12 (((String.length) n)-12)),op_stack,st_stack), op_stack) in
-              let i2 = parserComList(topop(st_stack),op_stack,co_stack,st_stack) in
-              let i3 = parserComList(topop(st_stack),op_stack,co_stack,st_stack) in
+              let i2 = parserComList(topop(st_stack),op_stack,st_stack) in
+              let i3 = parserComList(topop(st_stack),op_stack,st_stack) in
               Cifthenelse(topop(op_stack),i2,i3)
-(*
-DA AGGIUNGERE
-and parserComList (e,op_stack,stackcom,st_stack) =
+          (* Command Call *)
+          else if (((String.length) n)>=4) && eq_string(String(String.sub (n) 0 4),String("Call")) then
+              let i1 = push(parser(String(String.sub (n) 5 (((String.length) n)-5)),op_stack,st_stack), op_stack) in
+              let i2 = parserList(topop(st_stack),op_stack,st_stack) in
+              Call(topop(op_stack),i2)
+          (* Command Reflect *)
+          else if (((String.length) n)>=7) && eq_string(String(String.sub (n) 0 7),String("Reflect")) then
+              let i1 = Estring(String.sub (n) 8 (((String.length) n)-8)) in
+              Reflect(i1)
+          (* Command While *)
+          else if (((String.length) n)>=5) && eq_string(String(String.sub (n) 0 5),String("While")) then
+              let i1 = push(parser(String(String.sub (n) 6 (((String.length) n)-6)),op_stack,st_stack), op_stack) in
+              let i2 = parserComList(topop(st_stack),op_stack,st_stack) in
+              While(topop(op_stack),i2)
+
+          (* No command recognized *)
+          else failwith ("parser error or command not found")
+
+and parserComList (e,op_stack,st_stack) =
       match e with String(n) ->
-*)
+          let listCommand = [] in
+          if (String.contains(n) '[') && ((String.index(n) '[')<(String.index(n) ';')) then
+              let i1 = (String.sub (n) ((String.index(n) '[')+1) (((String.length) n)-(String.index(n) '[')-1)) in
+              let i2 = push(String(i1),st_stack) in
+              let l1 = parserCom(String(i1),op_stack,st_stack) in
+              let l2 = parserComList(topop(st_stack),op_stack,st_stack) in
+              let l = l1 :: l2 in l
+          else if (String.contains(n) ';') && ((String.index(n) ';')<(String.index(n) ']')) then
+              let i1 = (String.sub (n) ((String.index(n) ';')+1) (((String.length) n)-(String.index(n) ';')-1)) in
+              let i2 = push(String(i1),st_stack) in
+              let l1 = parserCom(String(i1),op_stack,st_stack) in
+              let l2 = parserComList(topop(st_stack),op_stack,st_stack) in
+              let l = l1 :: l2 in l
+          else
+              let i1 = (String.sub (n) ((String.index(n) ']')+1) (((String.length) n)-(String.index(n) ']')-1)) in
+              let i2 = push(String(i1),st_stack) in
+              listCommand

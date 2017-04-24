@@ -115,8 +115,7 @@ and semc (c: com) (r:dval env) (s: mval store) = match c with
         else if typecheck("string",g) && eq_int(occurrence(g,String("(")),occurrence(g,String(")"))) && len(g)>=Int(5) && isCommand(g)
           then let st_stack = emptystack(100,Novalue) in       (* String Stack*)
                let op_stack = emptystack(100,Undefinedstack) in         (* Operation Stack*)
-               let co_stack = = emptystack(100,Undefinedstackcom) in         (* Command Stack*)
-               let exp = parserCom(g,op_stack,co_stack,st_stack) in
+               let com = parserCom(g,op_stack,st_stack) in
                semc com r s
         else failwith ("string not valid")
 
