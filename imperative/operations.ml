@@ -100,7 +100,7 @@ let charat (x,y) = if typecheck("string",x) && typecheck("int",y)
                                           | _ -> failwith ("charat match error"))
                    else failwith ("charat type error")
 
-(* COMPARE IF THE TWO STRINGS ARE eq_string *)
+(* COMPARE IF THE TWO STRINGS ARE EQUALS *)
 let streq (x,y) = if typecheck("string",x) && typecheck("string",y)
                   then (match (x,y) with | (String(x), String(y)) -> iszero(Int(String.compare (x) y))
                                          | _ -> failwith ("streq match error"))
