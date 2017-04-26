@@ -183,7 +183,8 @@ let rec parser (e,op_stack,st_stack) =
       (* Base Case *)
           (* String is empty - then return it *)
           if isnull( len(String(n)) ) then Estring n
-
+          else if eq_string(String(n),String(")")) then
+            Estring n
       (* Inductive Step *)
           (* Ignored characters *)
 
@@ -191,7 +192,7 @@ let rec parser (e,op_stack,st_stack) =
           else if eq_string(subs(String(n),Int(0),Int(0)),String(",")) then
               parser( String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack )
           (* ")" character is ignored *)
-          else if eq_string(subs(String(n),Int(0),Int(0)),String(")")) then
+          else if eq_string(subs(String(n),Int(0),Int(0)),String(")")) && (String.length(n)!=1) then
               parser( String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack )
 
 
@@ -415,7 +416,7 @@ let rec parserCom (e,op_stack,st_stack) =
           if eq_string(subs(String(n),Int(0),Int(0)),String(",")) then
             parserCom(String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack)
           (* ")" character is ignored *)
-          else if eq_string(subs(String(n),Int(0),Int(0)),String(")")) then
+          else if eq_string(subs(String(n),Int(0),Int(0)),String(")")) && (String.length(n)!=1) then
             parserCom(String(String.sub (n) 1 (((String.length) n)-1)),op_stack,st_stack)
 
           (* Command Assign *)
