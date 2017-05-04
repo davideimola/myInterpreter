@@ -26,80 +26,70 @@ let minus x = if typecheck("int",x)
               then (match x with |Int(y) -> Int(-y)
                                  | _ -> failwith ("minus match error"))
               else failwith ("minus type error")
-
 (* COMPUTE IF A NUMBER IS EQUAL TO ZERO *)
 let iszero x = if typecheck("int",x)
                then (match x with |Int(y) -> Bool(y=0)
                                   | _ -> failwith ("iszero match error"))
                else failwith ("iszero type error")
-
 (* COMPUTE IF AN INT X IS EQUAL TO AN INT Y *)
 let equ (x,y) = if typecheck("int",x) && typecheck("int",y)
                 then (match (x,y) with |(Int(u), Int(w)) -> Bool(u=w)
                                        | _ -> failwith ("equ match error"))
                 else failwith ("equ type error")
-
 (* COMPUTE A SUM OF TWO INTS *)
 let plus (x,y) = if typecheck("int",x) && typecheck("int",y)
                  then (match (x,y) with |(Int(u), Int(w)) -> Int(u+w)
                                         | _ -> failwith ("plus match error"))
                  else failwith ("plus type error")
-
 (* COMPUTE A DIFFERNCE OF TWO INTS *)
 let diff (x,y) = if typecheck("int",x) && typecheck("int",y)
                  then (match (x,y) with |(Int(u), Int(w)) -> Int(u-w)
                                         | _ -> failwith ("diff match error"))
                  else failwith ("diff type error")
-
 (* COMPUTE A MULTIPLICATION OF TWO INTS *)
 let mult (x,y) = if typecheck("int",x) && typecheck("int",y)
                  then (match (x,y) with |(Int(u), Int(w)) -> Int(u*w)
                                         | _ -> failwith ("mult match error"))
                  else failwith ("mult type error")
-
 (* COMPUTE THE LOGIC OPERATION "AND" *)
 let et (x,y) = if typecheck("bool",x) && typecheck("bool",y)
                then (match (x,y) with |(Bool(u), Bool(w)) -> Bool(u && w)
                                       | _ -> failwith ("et match error"))
                else failwith ("et type error")
-
 (* COMPUTE THE LOGIC OPERATION "OR" *)
 let vel (x,y) = if typecheck("bool",x) && typecheck("bool",y)
                 then (match (x,y) with |(Bool(u), Bool(w)) -> Bool(u || w)
                                        | _ -> failwith ("vel match error"))
                 else failwith ("vel type error")
-
 (* COMPUTE THE LOGIC OPERATION "NOT" *)
 let non x = if typecheck("bool",x)
             then (match x with |Bool(x) -> Bool(not(x))
                                | _ -> failwith ("non match error"))
             else failwith ("non type error")
 (* --- BASIC FUNCTIONS - END --- *)
+
+
 (* --- STRING FUNCTIONS - START --- *)
 (* CONCATENATE STRING X TO STRING Y *)
 let conc (x,y) = if typecheck("string",x) && typecheck("string",y)
                     then (match (x,y) with | (String(x), String(y)) -> String(String.concat "" [x; y])
                                        | _ -> failwith ("concat match error"))
                     else failwith ("concat type error")
-
 (* CUT A STRING X AND FROM INDEX "i1" (included) TO INDEX "i2" (not included) *)
 let subs (x,i1,i2) = if typecheck("string",x) && typecheck("int",i1) && typecheck("int",i2)
                         then (match (x,i1,i2) with | (String(x), Int(i1), Int(i2)) -> String(String.sub x i1 ((i2-i1)+1))
                                            | _ -> failwith ("subs match error"))
                         else failwith ("subs type error")
-
 (* COMPUTE THE LENGTH OF THE STRING X *)
 let len x = if typecheck("string",x)
                 then (match x with | String(x) -> Int(String.length x)
                                    | _ -> failwith ("len match error"))
                 else failwith ("len type error")
-
 (* RETURN THE CHAR IN Y POSITION OF THE STRING X*)
 let charat (x,y) = if typecheck("string",x) && typecheck("int",y)
                    then (match (x,y) with | (String(x), Int(y)) -> String(String.sub x y 1)
                                           | _ -> failwith ("charat match error"))
                    else failwith ("charat type error")
-
 (* COMPARE IF THE TWO STRINGS ARE EQUALS *)
 let streq (x,y) = if typecheck("string",x) && typecheck("string",y)
                   then (match (x,y) with | (String(x), String(y)) -> iszero(Int(String.compare (x) y))
@@ -108,6 +98,7 @@ let streq (x,y) = if typecheck("string",x) && typecheck("string",y)
 (* --- STRING FUNCTIONS - END --- *)
 
 (* --- OPERATIONS FUNCTIONS - START --- *)
+(* CHECK IF A NUMBER IS EQUAL TO ZERO - like function iszero() but a bool-type is returned *)
 let isnull x = if typecheck("int",x)
               then (match x with |Int(y) -> (y=0)
                                   | _ -> failwith ("isnull match error"))
@@ -125,10 +116,7 @@ let eq_int (x,y) = if typecheck("int",x) && typecheck("int",y)
 (* --- OPERATIONS FUNCTIONS - END --- *)
 
 (* --- FUNCTIONS FOR REFLECT - START --- *)
-
-(* FUCNTION GREATER-EQUAL *)
-
-(* Count of the occurence of a character in a string *)
+(* COUNT THE OCCURRENCE OF A CHARACTER Y IN A STRING X *)
 let occurrence (x,y) =
   if typecheck("string",x) && typecheck("string",y)
   then (
@@ -146,24 +134,21 @@ let occurrence (x,y) =
       in loop ( Int(i),Int(tmp) )
   )
   else failwith ("occurrence type error")
-
-(* Converter function *)
+(* CONVERTER FUNCTIONS STRING-TO-INT AND STRING-TO-BOOL *)
 let str_to_int s =
   if typecheck("string",s) then
     (match (s) with String(u) -> int_of_string(u))
   else
     failwith ("type error or string not valid")
-
 let str_to_bool s =
   if typecheck("string",s) then
     (match (s) with String(u) -> bool_of_string(u))
   else
     failwith ("type error or string not valid")
-
-(* Top and Pop op_stack Function *)
+(* DO BOTH ISTRUCTIONS TOP AND POP *)
 let topop s =
       let top = top(s) in let pop = pop(s) in top
-
+(* CHECK IF A THE TAG S IS A VALID COMMAND *)
 let isCommand s =
       match s with String(g) ->
           if eq_string(subs(String(g),Int(0),Int(5)),String("Assign")) ||
@@ -174,7 +159,7 @@ let isCommand s =
             true
           else
             false
-
+(* --- FUNCTIONS FOR REFLECT - END --- *)
 
 (* Function parser for command Reflect for functions *)
 let rec parser (e,op_stack,st_stack) =
@@ -390,6 +375,11 @@ let rec parser (e,op_stack,st_stack) =
 and parserList (e,op_stack,st_stack) =
       match e with String(n) ->
       let listFunction = [] in
+      (* CHECK: IF STRING CONTAIN A '[' AND A ';' -> IS THE FIRST ELEMENT
+      *         IF STRING CONTAIN A ';'           -> IS AN INTERMEDIATE ELEMENT
+      *         IF STRING CONTAIN A ']'           -> IS THE LAST ELEMENT
+      * IF A "LAST ELEMENT" IS ENCOUNTERED, DO NOT USE A RECURSIVE CALL
+      *)
       if (String.contains(n) '[') && ((String.index(n) '[')<(String.index(n) ';')) then
           let i1 = (String.sub (n) ((String.index(n) '[')+1) (((String.length) n)-(String.index(n) '[')-1)) in
           let i2 = push(String(i1),st_stack) in
@@ -406,8 +396,6 @@ and parserList (e,op_stack,st_stack) =
           let i1 = (String.sub (n) ((String.index(n) ']')+1) (((String.length) n)-(String.index(n) ']')-1)) in
           let i2 = push(String(i1),st_stack) in
           listFunction
-
-
 
 (* Function parser for command Reflect for commands *)
 let rec parserCom (e,op_stack,st_stack) =
@@ -452,6 +440,11 @@ let rec parserCom (e,op_stack,st_stack) =
 and parserComList (e,op_stack,st_stack) =
       match e with String(n) ->
           let listCommand = [] in
+          (* CHECK: IF STRING CONTAIN A '[' AND A ';' -> IS THE FIRST ELEMENT
+          *         IF STRING CONTAIN A ';'           -> IS AN INTERMEDIATE ELEMENT
+          *         IF STRING CONTAIN A ']'           -> IS THE LAST ELEMENT
+          * IF A "LAST ELEMENT" IS ENCOUNTERED, DO NOT USE A RECURSIVE CALL
+          *)
           if (String.contains(n) '[') && ((String.index(n) '[')<(String.index(n) ';')) then
               let i1 = (String.sub (n) ((String.index(n) '[')+1) (((String.length) n)-(String.index(n) '[')-1)) in
               let i2 = push(String(i1),st_stack) in
