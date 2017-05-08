@@ -113,6 +113,24 @@ let eq_int (x,y) = if typecheck("int",x) && typecheck("int",y)
                    then (match (x,y) with |(Int(u), Int(w)) -> (u=w)
                                           | _ -> failwith ("eq_int match error"))
                    else failwith ("eq_int type error")
+(* CHECK IF A STRING X HAS ONLY THIS CHARACTERS: [a - z], [A - Z], [0 - 9] *)
+let isCharAlfanumeric x =
+                   (* (Char > 'A') && (Char < 'Z')    OR    (Char > 'a') && (Char < 'z')    OR    (Char > '0') && (Char < '9') *)
+                   if ( ((int_of_char(x)>64) && (int_of_char(x)<91)) || ((int_of_char(x)>96) && (int_of_char(x)<123)) || ((int_of_char(x)>47) && (int_of_char(x)<58)) ) then
+                          true
+                   else
+                          false
+let rec isAlfanumeric x =
+                   let i = 0 in
+                   let c = String.get (x) i in
+                   let bool_c = isCharAlfanumeric( c ) in
+                   (* IF current Char is alfanumeric AND "i" is not pointing at the end of the String
+                      then calls function isAlfanumeric recursively
+                      else bool_c has the correct output *)
+                   if ( bool_c && i < (String.length (x) -1) ) then
+                       isAlfanumeric(String.sub (x) (i+1) (String.length x -1) )
+                   else
+                       bool_c
 (* --- OPERATIONS FUNCTIONS - END --- *)
 
 (* --- FUNCTIONS FOR REFLECT - START --- *)
