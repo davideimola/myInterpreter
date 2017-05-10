@@ -106,15 +106,16 @@ and semc (c: com) (r:dval env) (s: mval store) = match c with
       (* Reflect use function parser to valuate string e *)
       | Reflect(e) -> let g = sem e r s in
         if typecheck("string",g) && eq_int(occurrence(g,String("(")),occurrence(g,String(")"))) && len(g)>=Int(5) && isCommand(g)
-          then let st_stack = emptystack(100,Novalue) in       (* String Stack*)
-               let op_stack = emptystack(100,Undefinedstack) in         (* Operation Stack*)
+          then let st_stack = emptystack(100,Novalue) in         (* String Stack*)
+               let op_stack = emptystack(100,Undefinedstack) in  (* Operation Stack*)
                let com = parserCom(g,op_stack,st_stack) in
                semc com r s
         else if typecheck("string",g) && eq_int(occurrence(g,String("(")),occurrence(g,String(")"))) && len(g)>=Int(5)
-          then let st_stack = emptystack(100,Novalue) in       (* String Stack*)
-               let op_stack = emptystack(100,Undefinedstack) in         (* Operation Stack*)
+          then let st_stack = emptystack(100,Novalue) in         (* String Stack*)
+               let op_stack = emptystack(100,Undefinedstack) in  (* Operation Stack*)
                let exp = parser(g,op_stack,st_stack) in
-               if empty(st_stack) || eq_string(subs(top(st_stack),Int(0),Int(0)),String(")"))                                (* If String stack is empty the result is OK *)
+               (* If String stack is empty the result is OK *)
+               if empty(st_stack) || eq_string(subs(top(st_stack),Int(0),Int(0)),String(")"))
                    then semc (Assign(Den "result",exp)) r s
                    else failwith ("parser error")
         else failwith ("string not valid")

@@ -103,12 +103,12 @@ let isnull x = if typecheck("int",x)
               then (match x with |Int(y) -> (y=0)
                                   | _ -> failwith ("isnull match error"))
               else failwith ("isnull type error")
-
+(* CHECK IF TWO STRINGS ARE EQUALS - like function streq() but a bool-type is returned *)
 let eq_string (x,y) = if typecheck("string",x) && typecheck("string",y)
                   then (match (x,y) with | (String(x), String(y)) -> isnull(Int(String.compare (x) y))
                                           | _ -> failwith ("eq_string match error"))
                   else failwith ("eq_string type error")
-
+(*  CHECK IF TWO INTEGERS ARE EQUALS - a bool-type is returned  *)
 let eq_int (x,y) = if typecheck("int",x) && typecheck("int",y)
                    then (match (x,y) with |(Int(u), Int(w)) -> (u=w)
                                           | _ -> failwith ("eq_int match error"))
@@ -143,8 +143,10 @@ let occurrence (x,y) =
       let i = 0 in
       let x_len = len(String(x)) in
       let rec loop ( Int(i),Int(tmp) ) =
+        (* BASE CASE - string x is finished *)
         if ( Int(i)>=x_len )
         then Int(tmp)
+        (* INDUCTIVE STEP - check if current char is equal to char y, update the counter, then loop *)
         else if ( eq_string( charat(String(x),Int(i)), String(y)) ) then
           loop ( plus(Int(i),Int(1)), plus(Int(tmp),Int(1)) )
         else
@@ -152,12 +154,13 @@ let occurrence (x,y) =
       in loop ( Int(i),Int(tmp) )
   )
   else failwith ("occurrence type error")
-(* CONVERTER FUNCTIONS STRING-TO-INT AND STRING-TO-BOOL *)
+(* CONVERTER FUNCTION - STRING-TO-INTEGER *)
 let str_to_int s =
   if typecheck("string",s) then
     (match (s) with String(u) -> int_of_string(u))
   else
     failwith ("type error or string not valid")
+(* CONVERTER FUNCTION - STRING-TO-BOOLEAN *)
 let str_to_bool s =
   if typecheck("string",s) then
     (match (s) with String(u) -> bool_of_string(u))
@@ -179,7 +182,7 @@ let isCommand s =
             false
 (* --- FUNCTIONS FOR REFLECT - END --- *)
 
-(* Function parser for command Reflect for functions *)
+(* Function "parser" for Reflect - FUNCTIONS *)
 let rec parser (e,op_stack,st_stack) =
       match e with String(n) ->
 
@@ -389,7 +392,7 @@ let rec parser (e,op_stack,st_stack) =
 
           (* No Expression recognized *)
           else failwith ("parser error or expression not found")
-
+(* Interpretate list for the function "parser" *)
 and parserList (e,op_stack,st_stack) =
       match e with String(n) ->
       let listFunction = [] in
@@ -415,7 +418,7 @@ and parserList (e,op_stack,st_stack) =
           let i2 = push(String(i1),st_stack) in
           listFunction
 
-(* Function parser for command Reflect for commands *)
+(* Function "parser" for Reflcet - COMMANDS *)
 let rec parserCom (e,op_stack,st_stack) =
       match e with String(n) ->
           (* "," character is ignored *)
@@ -454,7 +457,7 @@ let rec parserCom (e,op_stack,st_stack) =
 
           (* No command recognized *)
           else failwith ("parser error or command not found")
-
+(* Interpretate list for the function "parserCom" *)
 and parserComList (e,op_stack,st_stack) =
       match e with String(n) ->
           let listCommand = [] in
