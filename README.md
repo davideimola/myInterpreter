@@ -1,6 +1,6 @@
 # myInterpreter
 
-The aim of this project was built an Interpreter for the purpose to pass a University exam.
+The aim of this project was to build an Interpreter for the purpose to pass a University exam.
 
 We used our knowledge of interpreter logic and OCaml programming language for the development.
 
