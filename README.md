@@ -24,10 +24,10 @@ Before you can download and run our interpreter, you must download:
 
 Now you can run our code, go to the project folder of the imperative of functional interpreter and execute those commands in the terminal:
 
-'''
+```
 ocaml
 #use "main.ml";;
-'''
+```
 
 ## Authors
 
