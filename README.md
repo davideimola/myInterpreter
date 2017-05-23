@@ -12,9 +12,9 @@ We used our knowledge of interpreter logic and OCaml programming language for th
 
 ## Examination text
 
-Build an imperative and functional interpreter with OCaml, with those feature:
+Build an imperative and functional interpreter with OCaml, with those features:
 
-- Insert the type String on the language and some other functions. (ex: length, concat, ...)
+- Insert the String type in the language and some other functions. (ex: length, concat, ...)
 - Implement the reflect command. (ex: eval() in JavaScript)
 
 ## Quick start
@@ -23,7 +23,7 @@ Before you can download and run our interpreter, you must download:
 
 - [OCaml Programming Language](https://ocaml.org)
 
-Now you can run our code, go to the project folder of the imperative of functional interpreter and execute those commands in the terminal:
+Now to can run our code, go to the project folder of the imperative of functional interpreter and execute those commands in the terminal:
 
 ```
 ocaml
