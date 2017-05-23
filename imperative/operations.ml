@@ -36,17 +36,17 @@ let equ (x,y) = if typecheck("int",x) && typecheck("int",y)
                 then (match (x,y) with |(Int(u), Int(w)) -> Bool(u=w)
                                        | _ -> failwith ("equ match error"))
                 else failwith ("equ type error")
-(* COMPUTE A SUM OF TWO INTS *)
+(* COMPUTE THE SUM OF TWO INTS *)
 let plus (x,y) = if typecheck("int",x) && typecheck("int",y)
                  then (match (x,y) with |(Int(u), Int(w)) -> Int(u+w)
                                         | _ -> failwith ("plus match error"))
                  else failwith ("plus type error")
-(* COMPUTE A DIFFERNCE OF TWO INTS *)
+(* COMPUTE THE DIFFERNCE OF TWO INTS *)
 let diff (x,y) = if typecheck("int",x) && typecheck("int",y)
                  then (match (x,y) with |(Int(u), Int(w)) -> Int(u-w)
                                         | _ -> failwith ("diff match error"))
                  else failwith ("diff type error")
-(* COMPUTE A MULTIPLICATION OF TWO INTS *)
+(* COMPUTE THE MULTIPLICATION OF TWO INTS *)
 let mult (x,y) = if typecheck("int",x) && typecheck("int",y)
                  then (match (x,y) with |(Int(u), Int(w)) -> Int(u*w)
                                         | _ -> failwith ("mult match error"))
@@ -80,17 +80,17 @@ let subs (x,i1,i2) = if typecheck("string",x) && typecheck("int",i1) && typechec
                         then (match (x,i1,i2) with | (String(x), Int(i1), Int(i2)) -> String(String.sub x i1 ((i2-i1)+1))
                                            | _ -> failwith ("subs match error"))
                         else failwith ("subs type error")
-(* COMPUTE THE LENGTH OF THE STRING X *)
+(* COMPUTE THE LENGTH OF A STRING X *)
 let len x = if typecheck("string",x)
                 then (match x with | String(x) -> Int(String.length x)
                                    | _ -> failwith ("len match error"))
                 else failwith ("len type error")
-(* RETURN THE CHAR IN Y POSITION OF THE STRING X*)
+(* RETURN THE CHAR IN POSITION Y OF THE STRING X *)
 let charat (x,y) = if typecheck("string",x) && typecheck("int",y)
                    then (match (x,y) with | (String(x), Int(y)) -> String(String.sub x y 1)
                                           | _ -> failwith ("charat match error"))
                    else failwith ("charat type error")
-(* COMPARE IF THE TWO STRINGS ARE EQUALS *)
+(* COMPARE IF TWO STRINGS ARE EQUAL *)
 let streq (x,y) = if typecheck("string",x) && typecheck("string",y)
                   then (match (x,y) with | (String(x), String(y)) -> iszero(Int(String.compare (x) y))
                                          | _ -> failwith ("streq match error"))
@@ -103,17 +103,17 @@ let isnull x = if typecheck("int",x)
               then (match x with |Int(y) -> (y=0)
                                   | _ -> failwith ("isnull match error"))
               else failwith ("isnull type error")
-(* CHECK IF TWO STRINGS ARE EQUALS - like function streq() but a bool-type is returned *)
+(* CHECK IF TWO STRINGS ARE EQUAL - like function streq() but a bool-type is returned *)
 let eq_string (x,y) = if typecheck("string",x) && typecheck("string",y)
                   then (match (x,y) with | (String(x), String(y)) -> isnull(Int(String.compare (x) y))
                                           | _ -> failwith ("eq_string match error"))
                   else failwith ("eq_string type error")
-(*  CHECK IF TWO INTEGERS ARE EQUALS - a bool-type is returned  *)
+(*  CHECK IF TWO INTEGERS ARE EQUAL - a bool-type is returned  *)
 let eq_int (x,y) = if typecheck("int",x) && typecheck("int",y)
                    then (match (x,y) with |(Int(u), Int(w)) -> (u=w)
                                           | _ -> failwith ("eq_int match error"))
                    else failwith ("eq_int type error")
-(* CHECK IF A STRING X HAS ONLY THIS CHARACTERS: [a - z], [A - Z], [0 - 9] *)
+(* CHECK IF A STRING X HAS ONLY THESE CHARACTERS: [a - z], [A - Z], [0 - 9] *)
 let isCharAlfanumeric x =
                    (* (Char > 'A') && (Char < 'Z')    OR    (Char > 'a') && (Char < 'z')    OR    (Char > '0') && (Char < '9') *)
                    if ( ((int_of_char(x)>64) && (int_of_char(x)<91)) || ((int_of_char(x)>96) && (int_of_char(x)<123)) || ((int_of_char(x)>47) && (int_of_char(x)<58)) ) then
@@ -125,7 +125,7 @@ let rec isAlfanumeric x =
                    let c = String.get (x) i in
                    let bool_c = isCharAlfanumeric( c ) in
                    (* IF current Char is alfanumeric AND "i" is not pointing at the end of the String
-                      then calls function isAlfanumeric recursively
+                      then call function isAlfanumeric recursively
                       else bool_c has the correct output *)
                    if ( bool_c && i < (String.length (x) -1) ) then
                        isAlfanumeric(String.sub (x) (i+1) (String.length x -1) )
@@ -169,7 +169,7 @@ let str_to_bool s =
 (* DO BOTH ISTRUCTIONS TOP AND POP *)
 let topop s =
       let top = top(s) in let pop = pop(s) in top
-(* CHECK IF A THE TAG S IS A VALID COMMAND *)
+(* CHECK IF THE TAG S IS A VALID COMMAND *)
 let isCommand s =
       match s with String(g) ->
           if eq_string(subs(String(g),Int(0),Int(5)),String("Assign")) ||
@@ -204,8 +204,8 @@ let rec parser (e,op_stack,st_stack) =
 
           (* Terminal types [Den, Eint, Ebool, Estring]
            * If a terminal type is recognized:
-           * First block: check if is an operation first operator, before a char "," and a char ")" -> otherwise run second block
-           * Second block: check if is an operation second operator, before only char ")" -> otherwise run third block
+           * First block: check if the first operator is before a char "," and a char ")" -> otherwise run second block
+           * Second block: check if the second operator is before only char ")" -> otherwise run third block
            * Third block: is alone
            *)
 
@@ -396,9 +396,9 @@ let rec parser (e,op_stack,st_stack) =
 and parserList (e,op_stack,st_stack) =
       match e with String(n) ->
       let listFunction = [] in
-      (* CHECK: IF STRING CONTAIN A '[' AND A ';' -> IS THE FIRST ELEMENT
-      *         IF STRING CONTAIN A ';'           -> IS AN INTERMEDIATE ELEMENT
-      *         IF STRING CONTAIN A ']'           -> IS THE LAST ELEMENT
+      (* CHECK: IF STRING CONTAINS A '[' AND A ';' -> ITS THE FIRST ELEMENT
+      *         IF STRING CONTAINS A ';'           -> ITS AN INTERMEDIATE ELEMENT
+      *         IF STRING CONTAINS A ']'           -> ITS THE LAST ELEMENT
       * IF A "LAST ELEMENT" IS ENCOUNTERED, DO NOT USE A RECURSIVE CALL
       *)
       if (String.contains(n) '[') && ((String.index(n) '[')<(String.index(n) ';')) then
@@ -461,9 +461,9 @@ let rec parserCom (e,op_stack,st_stack) =
 and parserComList (e,op_stack,st_stack) =
       match e with String(n) ->
           let listCommand = [] in
-          (* CHECK: IF STRING CONTAIN A '[' AND A ';' -> IS THE FIRST ELEMENT
-          *         IF STRING CONTAIN A ';'           -> IS AN INTERMEDIATE ELEMENT
-          *         IF STRING CONTAIN A ']'           -> IS THE LAST ELEMENT
+          (* CHECK: IF STRING CONTAINS A '[' AND A ';' -> ITS THE FIRST ELEMENT
+          *         IF STRING CONTAINS A ';'           -> ITS AN INTERMEDIATE ELEMENT
+          *         IF STRING CONTAINS A ']'           -> ITS THE LAST ELEMENT
           * IF A "LAST ELEMENT" IS ENCOUNTERED, DO NOT USE A RECURSIVE CALL
           *)
           if (String.contains(n) '[') && ((String.index(n) '[')<(String.index(n) ';')) then

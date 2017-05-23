@@ -6,6 +6,7 @@
 * Slemer Andrea - VR386253
 *)
 
+(* SEMANTICS: LINK EVERY FUNCTION TAG WITH THE CORRECT OPERATION *)
 let rec sem (e:exp) (r:dval env) (s: mval store) =
       match e with
       | Eint(n)    -> Int(n)
@@ -103,13 +104,20 @@ and semc (c: com) (r:dval env) (s: mval store) = match c with
       | Call(e1, e2) -> let (p, s1) = semden e1 r s in let (v, s2) = semlist e2 r s1 in applyproc(p, v, s2)
       | Block(b) -> semb b r s
 
-      (* Reflect use function parser to valuate string e *)
+      (* FUNCTION FOR VALUATE AN INPUT STRING e *)
       | Reflect(e) -> let g = sem e r s in
+        (* CHECK THE FIRST TOKEN:
+           IF ITS A VALID COMMAND             -> EXECUTE THE FIRST BLOCK  (parserCom)
+           IF ITS NOT A COMMAND BUT IS VALID  -> EXECUTE THE SECOND BLOCK (parser)
+           OTHERWISE                          -> FAIL BECAUSE STRING IS NOT VALID
+        *)
+        (* FIRST BLOCK - parserCom *)
         if typecheck("string",g) && eq_int(occurrence(g,String("(")),occurrence(g,String(")"))) && len(g)>=Int(5) && isCommand(g)
           then let st_stack = emptystack(100,Novalue) in         (* String Stack*)
                let op_stack = emptystack(100,Undefinedstack) in  (* Operation Stack*)
                let com = parserCom(g,op_stack,st_stack) in
                semc com r s
+        (* SECOND BLOCK - parser *)
         else if typecheck("string",g) && eq_int(occurrence(g,String("(")),occurrence(g,String(")"))) && len(g)>=Int(5)
           then let st_stack = emptystack(100,Novalue) in         (* String Stack*)
                let op_stack = emptystack(100,Undefinedstack) in  (* Operation Stack*)
@@ -118,6 +126,7 @@ and semc (c: com) (r:dval env) (s: mval store) = match c with
                if empty(st_stack) || eq_string(subs(top(st_stack),Int(0),Int(0)),String(")"))
                    then semc (Assign(Den "result",exp)) r s
                    else failwith ("parser error")
+        (* OTHERWISE *)
         else failwith ("string not valid")
 
 and semcl cl r s = match cl with

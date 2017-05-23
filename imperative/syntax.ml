@@ -33,7 +33,7 @@ type exp =
       (* SELECTION CONSTRUCT *)
       | Ifthenelse of exp * exp * exp
 
-      (*  *)
+      (* APPLY A SPECIFIC ENVIRONMENT IN A BLOCK *)
       | Let of ide * exp * exp
 
       (* OPERATIONS ON MEMORY LOCATIONS *)
