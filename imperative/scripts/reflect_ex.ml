@@ -47,3 +47,15 @@ let rho = bind (emptyenv(Unbound), "result", Dloc l);;
 let sigma1 = semc com rho sigma;;
 
 #use "scripts/output.ml";;
+
+(* ESEMPIO 5 *)
+Printf.printf("\n\n");;
+Printf.printf("ESEMPIO 5\n");;
+let s = "Reflect(Sum(Diff(Eint 5,Minus(Minus(Eint 1))),Len(Estring ciao)))";;
+let com = Reflect(Estring s);;
+
+let d = [("result",Newloc(Estring ""))];;
+let (rho,sigma) = semdv d (emptyenv Unbound) (emptystore Undefined);;
+let sigma1 = semc com rho sigma;;
+
+#use "scripts/output.ml";;
