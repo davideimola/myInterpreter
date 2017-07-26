@@ -1,4 +1,4 @@
-Printf.printf("Reflect\n");;
+Printf.printf("Reflect fattoriale\n");;
 
 let s = "While(Not(Eq(Val(Den z),Eint 0)),[Assign(Den w,Prod(Val(Den w),Val(Den z)));Assign(Den z,Diff(Val(Den z),Eint 1))])";;
 
