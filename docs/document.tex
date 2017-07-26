@@ -7,7 +7,7 @@
 \documentclass[a4paper,titlepage]{book}
 
 \usepackage[italian]{babel}
-\usepackage[nowrite,noadvisor]{frontespizio}
+\usepackage[noadvisor]{frontespizio}
 \usepackage{amsmath,amssymb,graphicx}
 \usepackage{natbib}
 \usepackage{url}
@@ -21,20 +21,20 @@
 %Generazione Frontespizio
 \begin{frontespizio}
 \Universita{Verona}
-\Facolta{Scienze}
-\Corso[Laurea Triennale]{Informatica}
+\Dipartimento{Informatica}
+\Corso[Laurea]{Informatica}
 \Annoaccademico{2016--2017}
 \Titoletto{}
-\Titolo{Relazione di Interpreti}
+\Titolo{Relazione di Linguaggi}
 \Sottotitolo{}
 \Candidato[VR386238]{Davide Imola}
 \Candidato[VR386253]{Andrea Slemer}
 \end{frontespizio}
 
+\frontmatter
 \tableofcontents
-\clearpage
-\thispagestyle{empty}
 
+\mainmatter
 \chapter{Testo elaborato}
 Estendere l'interprete OCAML studiato durante le lezioni del corso di Linguaggi scegliendo una delle tre semantiche studiate:
 operazionale, denotazionale o iterativa.

@@ -1,14 +1,14 @@
 \select@language {italian}
 \select@language {italian}
-\contentsline {chapter}{\numberline {1}Testo elaborato}{5}
-\contentsline {chapter}{\numberline {2}Struttura del programma}{7}
-\contentsline {section}{\numberline {2.1}Linguaggio funzionale}{7}
-\contentsline {section}{\numberline {2.2}Linguaggio imperativo}{7}
-\contentsline {section}{\numberline {2.3}Struttura files del software}{9}
-\contentsline {chapter}{\numberline {3}Modifiche al software di base}{11}
-\contentsline {section}{\numberline {3.1}Tipo stringa: inserimento}{11}
-\contentsline {section}{\numberline {3.2}Tipo stringa: operazioni}{12}
-\contentsline {section}{\numberline {3.3}Comando Reflect}{15}
-\contentsline {section}{\numberline {3.4}Parser}{15}
-\contentsline {section}{\numberline {3.5}ParserCom}{16}
-\contentsline {chapter}{\numberline {4}Esempi}{17}
+\contentsline {chapter}{\numberline {1}Testo elaborato}{1}
+\contentsline {chapter}{\numberline {2}Struttura del programma}{3}
+\contentsline {section}{\numberline {2.1}Linguaggio funzionale}{3}
+\contentsline {section}{\numberline {2.2}Linguaggio imperativo}{3}
+\contentsline {section}{\numberline {2.3}Struttura files del software}{5}
+\contentsline {chapter}{\numberline {3}Modifiche al software di base}{7}
+\contentsline {section}{\numberline {3.1}Tipo stringa: inserimento}{7}
+\contentsline {section}{\numberline {3.2}Tipo stringa: operazioni}{8}
+\contentsline {section}{\numberline {3.3}Comando Reflect}{11}
+\contentsline {section}{\numberline {3.4}Parser}{11}
+\contentsline {section}{\numberline {3.5}ParserCom}{12}
+\contentsline {chapter}{\numberline {4}Esempi}{13}
