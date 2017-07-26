@@ -36,11 +36,11 @@
 
 \mainmatter
 \chapter{Testo elaborato}
-Estendere l'interprete OCAML studiato durante le lezioni del corso di Linguaggi scegliendo una delle tre semantiche studiate:
+Estendere l'interprete OCaml studiato durante le lezioni del corso di Linguaggi scegliendo una delle tre semantiche studiate:
 operazionale, denotazionale o iterativa.
-La soluzione dovr\'a contenere il codice base imperativo e funzionale di blocchi, procedure e funzioni.
+La soluzione dovr\`a contenere il codice base imperativo e funzionale di blocchi, procedure e funzioni.
 
-L'estensione del linguaggio didattico dovr\'a prevedere:
+L'estensione del linguaggio didattico dovr\`a prevedere:
 \begin{itemize}
 \item Il tipo stringa di caratteri: string
 \item La costante string nella semantica come sequenza di caratteri alfanumerici
@@ -49,26 +49,22 @@ L'estensione del linguaggio didattico dovr\'a prevedere:
 \item L'operazione di sottostringa: subs (string, index1, index2)
 \end{itemize}
 
-La possibilit\'a di introdurre ulteriori estenzioni/operazioni prendendo ispirazione da operazioni note in linguaggi di scripting
-\'e lasciata allo studente.
+La possibilit\`a di introdurre ulteriori estensioni/operazioni prendendo ispirazione da operazioni note in linguaggi di scripting
+\`e lasciata allo studente.
 
-L'estensione prevede anche l'implementazione del comando 'Reflect string', il quale riceve in input come unico parametro
+L'estensione prevede anche l'implementazione del comando \textbf{Reflect string}, il quale riceve in input come unico parametro
 una stringa e richiama l'interprete sulla stringa, la quale viene vista come sequenza di comandi eseguibili.
-
-\clearpage
-\thispagestyle{empty}
 
 \chapter{Struttura del programma}
 L'interprete utilizza una semantica denotazionale.
-Per rendere pi\'u efficente l'invocazione dell'interprete in fase di testing, abbiamo utilizzato un file di supporto chiamato 'main.ml',
+Per rendere pi\`u efficente l'invocazione dell'interprete in fase di testing, abbiamo utilizzato un file di supporto chiamato 'main.ml',
 il quale ha il compito di richiamare tutte le parti dell'interprete che risiedono in file diversi:
 
 \section{Linguaggio funzionale}
 Abbiamo adottato per una prima stesura del programma un linguaggio funzionale.
 La scelta ci ha permesso di costruire una prima versione dell'elaborato finale in modo agevole, in quanto il linguaggio
-funzionale permette una più semplice e facile individuazione degli errori.
-Per un limite della struttura non siamo riusciti a portare a termine l'elaborato, poich\'e la funzione 'Reflect string' richiedeva che la
-stringa ricevuta in ingresso fosse interpretata come sequenza di comandi, il che \'e incompatibile con la struttura del
+funzionale permette una pi\`u semplice e facile individuazione degli errori.
+Per un limite della struttura non siamo riusciti a portare a termine l'elaborato, poich\`e la funzione \textbf{Reflect string} richiedeva che la stringa ricevuta in ingresso fosse interpretata come sequenza di comandi, il che \`e incompatibile con la struttura del
 linguaggio funzionale.
 
 \section{Linguaggio imperativo}
@@ -103,14 +99,11 @@ prodotto, abbiamo avuto una base di partenza per l'elaborato finale.
 \item \textbf{semantics.ml:} contiene la definizione della semantica di ogni parte sintattica necessaria all'interprete.
 \end{itemize}
 
-\clearpage
-\thispagestyle{empty}
-
 \chapter{Modifiche al software di base}
 
 \section{Tipo stringa: inserimento}
-Per soddisfare l'inserimento del tipo \textbf{stringa} \'e stato aggiunto sia nella sintassi (all'interno del tipo \textit{exp}) e anche
-nella semantica (all'interno di tutti e tre i tipi presenti nel file \textit{domains.ml}).
+Per soddisfare l'inserimento del tipo \textbf{stringa} \`e stato aggiunto sia nella sintassi (all'interno del tipo \textit{exp}) e anche
+nella semantica (all'interno di tutti e tre i tipi presenti nel file \textit{domains.ml}) il tipo \textit{string}.
 
 \begin{figure}[H]
 \center
@@ -148,7 +141,7 @@ Per lo sviluppo di questa funzione abbiamo fatto affidamento alla funzione \text
 \end{figure}
 \clearpage
 
-\item Una operazione \textbf{'conc string string'} che restituisce una stringa, la quale \'e la concatenazione delle due stringhe passate come parametri.
+\item Una operazione \textbf{'conc string string'} che restituisce una stringa, la quale \`e la concatenazione delle due stringhe passate come parametri.
 Per lo sviluppo di questa funzione abbiamo fatto affidamento alla funzione \textit{String.concat} di OCaml, questo ci ha permesso di giustapporre due stringhe inserendole in una lista, utilizzando come stringa di separazione la \textbf{stringa vuota ""}.
 
 \begin{figure}[H]
@@ -157,8 +150,8 @@ Per lo sviluppo di questa funzione abbiamo fatto affidamento alla funzione \text
 \caption{Funzione Conc: 'operations.ml' \label{fig:conc}}
 \end{figure}
 
-\item Una operazione \textbf{'subs string int int'} che restituisce una stringa, la quale \'e composta dal pezzo di stringa passata come parametro che intercorre dal carattere in posizione del primo intero (compreso), fino al carattere in posizione del secondo intero (non compreso).
-Per lo sviluppo di questa funzione abbiamo fatto affidamento alla funzione \textbf{String.sub} di OCaml, questo ci ha permesso di evitare molti controlli sull'idoneit\'a dei tre parametri ricevuti in ingresso.
+\item Una operazione \textbf{'subs string int int'} che restituisce una stringa, la quale \`e composta dal pezzo di stringa passata come parametro che intercorre dal carattere in posizione del primo intero (compreso), fino al carattere in posizione del secondo intero (non compreso).
+Per lo sviluppo di questa funzione abbiamo fatto affidamento alla funzione \textbf{String.sub} di OCaml, questo ci ha permesso di evitare molti controlli sull'idoneit\`a dei tre parametri ricevuti in ingresso.
 
 \begin{figure}[H]
 \center
@@ -167,7 +160,7 @@ Per lo sviluppo di questa funzione abbiamo fatto affidamento alla funzione \text
 \end{figure}
 \clearpage
 
-\item Una operazione \textbf{'charat string int'} che restitusce un carattere, il quale \'e estratto dalla stringa passata come parametro e risiede nella posizione indicata dall'intero. Il carattere viene memorizzato comunque in formato \textit{String}.
+\item Una operazione \textbf{'charat string int'} che restitusce un carattere, il quale \`e estratto dalla stringa passata come parametro e risiede nella posizione indicata dall'intero. Il carattere viene memorizzato comunque in formato \textit{String}.
 
 \begin{figure}[H]
 \center
@@ -175,7 +168,7 @@ Per lo sviluppo di questa funzione abbiamo fatto affidamento alla funzione \text
 \caption{Funzione CharAt: 'operations.ml' \label{fig:charat}}
 \end{figure}
 
-\item Una operazione \textbf{'streq string string'} che restituisce un valore \textit{'boolean'}, il quale \'e calcolato confrontando le due stringhe passate come parametro. Viene utilizzato come supporto la funzione \textit{'String.compare'} la quale restiusce un valore intero (\textit{negativo} se x < y, \textit{uguale a zero} se x = y, o \textit{positivo} se x > y).
+\item Una operazione \textbf{'streq string string'} che restituisce un valore \textit{'boolean'}, il quale \`e calcolato confrontando le due stringhe passate come parametro. Viene utilizzato come supporto la funzione \textit{'String.compare'} la quale restiusce un valore intero (\textit{negativo} se x < y, \textit{uguale a zero} se x = y, o \textit{positivo} se x > y).
 
 \begin{figure}[H]
 \center
@@ -190,7 +183,7 @@ Il comando \textbf{'Reflect string'} riceve in ingresso una stringa e la interpr
 
 Reflect permette di effettuare uno scan della stringa da sinistra a destra, eseguendo ogni token riconosciuto come comando o espressione ed aspettandosi dopo ogni sotto-stringa riconosciuta i parametri definiti nella semantica corrispondente.
 
-Il comando \'e stato implementato nella semantica dei comandi il quale controlla che la stringa sia formattata correttamente controllando che il numero di parentesi \textbf{'('} e \textbf{')'} sia di egual numero, inoltre controlla se il primo token della stringa rappresenta un comando o un'espressione.
+Il comando \`e stato implementato nella semantica dei comandi il quale controlla che la stringa sia formattata correttamente controllando che il numero di parentesi \textbf{'('} e \textbf{')'} sia di egual numero, inoltre controlla se il primo token della stringa rappresenta un comando o un'espressione.
 
 Nel caso la funzione \textit{'isCommand()'} dovesse riconoscere un comando \textit{(restituendo un boolan con valore 'true')}, verrebbe invocata la funzione \textit{parserCom()}, altrimenti verrebbe richiamata la funzione \textit{parser}.
 
@@ -220,11 +213,27 @@ La funzione riconosce i vari token grazie ad una funzione di \textit{'substring'
 
 \textbf{Caso base:} la funzione incontra la fine della stringa o un tipo terminale \textit{(Den, Eint, Ebool, Estring)}
 
-\textbf{Caso ricorsivo:} la funzione incontra un'espressione che necessita di uno o pi\'u parametri. In questo caso il token viene memorizzato e si procede a successive scansioni per la lettura dei parametri. Solo quando tutti i parametri sono stati letti correttamente l'espressione viene eseguita.
+\textbf{Caso ricorsivo:} la funzione incontra un'espressione che necessita di uno o pi\`u parametri. In questo caso il token viene memorizzato e si procede a successive scansioni per la lettura dei parametri. Solo quando tutti i parametri sono stati letti correttamente l'espressione viene eseguita.
 
 \section{ParserCom}
-La funzione \textit{parserCom} utilizza gli stessi tre paramteri della funzione \textit{parser}, ma viene chiamata ogni volta che viene riconosciuto che il primo token della stringa \textbf{e} \'e un comando.
+La funzione \textit{parserCom} utilizza gli stessi tre paramteri della funzione \textit{parser}, ma viene chiamata ogni volta che viene riconosciuto che il primo token della stringa \textbf{e} \`e un comando.
 
 \chapter{Esempi}
+Per controllare l'effettivo funzionamento dell'interprete realizzato, sono stati progettati degli script, i quali vanno a testare le varie funzionalit\`a richieste.
+
+\section{Tipo stringa e funzioni}
+Per il controllo dell'implementazione del tipo stringa e delle sue relative funzioni \`e stato sviluppato lo script \textit{string\_ex.ml}.
+
+\section{Fattoriale}
+\`E stato inoltre creato un programma atto a calcolare il fattoriale di un numero. Questo \`e stato implementato in due modi distinti:
+
+\begin{description}
+\item[fatt.ml] Calcola il fattoriale sfruttando la ricorsivit\`a delle funzioni.
+\item[reflect\_com.ml] Calcola il fattoriale richiamando la Reflect con l'utilizzo di comandi, andando cos\`i a sfruttare l'iterativit\`a del ciclo \textit{while}.
+\end{description}
+
+\section{Funzioni generiche utilizzando Reflect}
+In questo script sono stati implementati cinque esempi di utilizzo del comando \textbf{Reflect} con difficolt\`a crescente.
+Da notare \`e che l'ultimo esempio proposto il comando \textbf{Reflect} richiama in modo annidato se stesso per l'esecuzione di una semplice funzione.
 
 \end{document}
