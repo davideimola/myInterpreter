@@ -447,7 +447,7 @@ let rec parserCom (e,op_stack,st_stack) =
               Call(topop(op_stack),i2)
           (* Command Reflect *)
           else if (((String.length) n)>=7) && eq_string(String(String.sub (n) 0 7),String("Reflect")) then
-              let i1 = Estring(String.sub (n) 8 (((String.length) n)-8)) in
+              let i1 = Estring(String.sub (n) 8 (((String.length) n)-9)) in
               Reflect(i1)
           (* Command While *)
           else if (((String.length) n)>=5) && eq_string(String(String.sub (n) 0 5),String("While")) then
