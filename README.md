@@ -25,8 +25,8 @@ Before you can download and run our interpreter, you must download:
 
 Now to can run our code, go to the project folder of the imperative of functional interpreter and execute those commands in the terminal:
 
-```
-ocaml
+```bash
+$ ocaml
 #use "main.ml";;
 ```
 
